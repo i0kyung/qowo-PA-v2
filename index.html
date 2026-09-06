@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>청소분담실</title>
+  <style>
+    :root {
+      --mint: #bfeee4;
+      --sky: #dbeeff;
+      --lavender: #e8defc;
+      --cream: #fff8dc;
+      --ink: #263238;
+      --muted: #74808a;
+      --line: #edf0f4;
+      --shadow: 0 20px 50px rgba(56, 73, 89, .12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 16% 12%, rgba(191, 238, 228, .9) 0 84px, transparent 86px),
+        radial-gradient(circle at 84% 5%, rgba(232, 222, 252, .9) 0 74px, transparent 76px),
+        linear-gradient(180deg, #ffffff 0%, #fbfdff 55%, #fffaf0 100%);
+      color: var(--ink);
+      font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+    button, input { font: inherit; }
+    button { border: 0; cursor: pointer; }
+    .app {
+      width: min(470px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 34px 18px 28px;
+      display: grid;
+      align-content: center;
+      gap: 18px;
+    }
+    .hero { text-align: center; padding: 10px 10px 0; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 74px;
+      height: 74px;
+      margin-bottom: 18px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, var(--mint), var(--sky));
+      box-shadow: 0 14px 28px rgba(79, 144, 168, .18);
+      font-size: 38px;
+    }
+    h1 { margin: 0; font-size: 38px; line-height: 1.1; font-weight: 900; }
+    .intro {
+      margin: 14px auto 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+      font-weight: 700;
+    }
+    .card {
+      background: rgba(255,255,255,.94);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .step { display: none; }
+    .step.active { display: block; }
+    .field { display: grid; gap: 10px; margin-bottom: 18px; }
+    .field span { font-size: 14px; font-weight: 900; color: #43515d; }
+    input, .date-button {
+      width: 100%;
+      min-height: 54px;
+      border: 1px solid #e3e8ee;
+      border-radius: 18px;
+      background: #fff;
+      padding: 15px 16px;
+      color: var(--ink);
+      outline: 0;
+      font-weight: 800;
+    }
+    input:focus, .date-button:focus-visible {
+      border-color: #8ed9cf;
+      box-shadow: 0 0 0 4px rgba(191,238,228,.5);
+    }
+    .date-button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      text-align: left;
+    }
+    .date-value { font-size: 16px; }
+    .date-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #e0f7f1, #eee7ff);
+      color: #5c6680;
+      font-size: 20px;
+      flex: 0 0 auto;
+    }
+    .chip {
+      min-height: 42px;
+      border-radius: 999px;
+      background: #f3f8fb;
+      color: #52616d;
+      font-weight: 900;
+    }
+    .chip.active { background: #dff7f1; color: #12675b; }
+    .section-label {
+      margin: 4px 0 12px;
+      color: #394854;
+      font-size: 13px;
+      font-weight: 950;
+    }
+    .settings-card {
+      display: grid;
+      gap: 12px;
+      margin: 18px 0;
+      padding: 15px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(227,248,243,.88), rgba(241,236,255,.88));
+      border: 1px solid #e7edf3;
+    }
+    .setting-row {
+      display: grid;
+      gap: 8px;
+    }
+    .setting-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: #43515d;
+      font-size: 13px;
+      font-weight: 950;
+    }
+    .setting-count {
+      color: #7d8893;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .toggle-select {
+      min-height: 42px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.88);
+      color: #52616d;
+      border: 1px solid #e3e8ee;
+      font-weight: 950;
+    }
+    .chip-panel {
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+    }
+    .chip-panel.open { display: grid; }
+    .select-chip {
+      min-height: 38px;
+      padding: 0 8px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid #e4e9ef;
+      color: #5e6a76;
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .select-chip.active {
+      background: #dff7f1;
+      border-color: #95ded3;
+      color: #12675b;
+      box-shadow: 0 8px 14px rgba(79,144,168,.12);
+    }
+    .warn-note {
+      display: none;
+      margin: 0;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: #fff8dd;
+      color: #7a641d;
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 850;
+    }
+    .warn-note.show { display: block; }
+    .seat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .seat {
+      min-height: 46px;
+      border-radius: 16px;
+      background: #f7f5ff;
+      color: #655a7d;
+      font-weight: 900;
+      border: 1px solid #ede8ff;
+    }
+    .seat.active {
+      background: linear-gradient(135deg, #efe7ff, #dff7f1);
+      border-color: #c8baef;
+      color: #372f53;
+      box-shadow: 0 10px 18px rgba(132,112,176,.15);
+    }
+    .seat.disabled {
+      cursor: not-allowed;
+      background: #eef1f4;
+      border-color: #e1e6eb;
+      color: #9aa4af;
+      opacity: .72;
+    }
+    .seat .disabled-text {
+      display: block;
+      margin-top: 2px;
+      font-size: 10px;
+      font-weight: 950;
+      color: #a1aab4;
+    }
+    .submit, .next {
+      width: 100%;
+      min-height: 58px;
+      margin-top: 6px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #8bded2, #bca9ef);
+      color: #fff;
+      font-size: 17px;
+      font-weight: 950;
+      box-shadow: 0 16px 24px rgba(105,143,184,.22);
+    }
+    .back-button {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 10px;
+      border-radius: 18px;
+      background: #f5f7fb;
+      color: #60707c;
+      font-weight: 900;
+    }
+    .hint {
+      margin: 14px 0 0;
+      color: #8a95a1;
+      font-size: 13px;
+      line-height: 1.45;
+      text-align: center;
+      font-weight: 700;
+    }
+    .selected-info {
+      margin: 0 0 18px;
+      padding: 13px 14px;
+      border-radius: 18px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      color: #485865;
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 900;
+      text-align: center;
+    }
+    .guide-card {
+      margin: 0 0 16px;
+      padding: 14px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #e9faf5, #fff8df);
+      border: 1px solid #e5f0e9;
+      color: #4d5b66;
+      font-size: 13px;
+      line-height: 1.5;
+      font-weight: 820;
+    }
+    .guide-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #2f4d49;
+      font-size: 14px;
+      font-weight: 950;
+    }
+    .guide-card ol {
+      margin: 0;
+      padding-left: 19px;
+    }
+    .guide-card li { margin: 2px 0; }
+    .shared-notice {
+      display: none;
+      margin: 0 0 14px;
+      padding: 13px 14px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #e3f8f3, #f1ecff);
+      color: #485865;
+      font-size: 13px;
+      line-height: 1.45;
+      font-weight: 850;
+    }
+    .shared-notice.show { display: block; }
+    .calendar-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: end;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(45, 55, 67, .34);
+    }
+    .calendar-backdrop.open { display: flex; }
+    .calendar-sheet {
+      width: min(430px, 100%);
+      border-radius: 30px;
+      background: #fff;
+      box-shadow: 0 28px 80px rgba(35,45,58,.24);
+      padding: 18px;
+      animation: sheetIn .2s ease-out;
+    }
+    @keyframes sheetIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .calendar-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .month-title { font-size: 19px; font-weight: 950; }
+    .month-nav {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      background: #f5f7fb;
+      color: #52616d;
+      font-size: 22px;
+      font-weight: 900;
+    }
+    .week, .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+    .week span {
+      padding: 8px 0;
+      text-align: center;
+      color: #8b96a3;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .day {
+      aspect-ratio: 1;
+      border-radius: 16px;
+      background: transparent;
+      color: #40505c;
+      font-weight: 900;
+    }
+    .day.blank { pointer-events: none; }
+    .day.today { border: 1px solid #92dcd2; }
+    .day.selected {
+      background: linear-gradient(135deg, #8bded2, #bba8ef);
+      color: #fff;
+      box-shadow: 0 10px 18px rgba(132,112,176,.18);
+    }
+    .calendar-foot {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .calendar-foot button {
+      flex: 1;
+      min-height: 44px;
+      border-radius: 16px;
+      background: #f5f7fb;
+      color: #52616d;
+      font-weight: 950;
+    }
+    .calendar-foot .today-btn { background: #e3f8f3; color: #11665c; }
+    @media (max-width: 380px) {
+      .app { padding-inline: 12px; }
+      .card { padding: 18px; border-radius: 24px; }
+      .seat-grid { grid-template-columns: repeat(3, 1fr); }
+      .chip-panel { grid-template-columns: repeat(3, 1fr); }
+      h1 { font-size: 34px; }
+      .calendar-sheet { padding: 14px; border-radius: 24px; }
+      .day { border-radius: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div class="badge" aria-hidden="true">🧹</div>
+      <h1 id="heroTitle">PA 랜덤청소분담</h1>
+      <p class="intro" id="heroIntro">호실과 날짜를 입력하면<br>16개 청소 역할이 자동으로 배정됩니다.</p>
+    </section>
+
+    <form class="card" id="entryForm">
+      <section class="step active" id="stepOne">
+        <p class="section-label">입력</p>
+        <label class="field">
+          <span>호실</span>
+          <input id="roomInput" name="room" inputmode="numeric" autocomplete="off" placeholder="예) 404" required>
+        </label>
+
+        <div class="field">
+          <span>청소점검 날짜</span>
+          <button class="date-button" id="dateButton" type="button" aria-haspopup="dialog">
+            <span class="date-value" id="dateDisplay"></span>
+            <span class="date-icon" aria-hidden="true">▦</span>
+          </button>
+        </div>
+
+        <section class="settings-card" aria-label="선택 설정">
+          <p class="section-label" style="margin:0">선택 설정</p>
+          <label class="field" style="margin-bottom:0">
+            <span>참여 인원</span>
+            <input id="memberCountInput" type="number" min="1" max="16" value="16">
+          </label>
+          <div class="setting-row">
+            <div class="setting-head">
+              <span>제외 인원</span>
+              <span class="setting-count" id="excludeSeatCount">없음</span>
+            </div>
+            <button class="toggle-select" id="toggleExcludeSeats" type="button">제외 인원 선택</button>
+            <div class="chip-panel" id="excludeSeatPanel"></div>
+            <p class="warn-note" id="excludeSeatNote">제외 인원이 있을 경우, 남은 인원에게 일부 청소 역할이 추가 배정될 수 있습니다.</p>
+          </div>
+          <div class="setting-row">
+            <div class="setting-head">
+              <span>제외 역할</span>
+              <span class="setting-count" id="excludeRoleCount">없음</span>
+            </div>
+            <button class="toggle-select" id="toggleExcludeRoles" type="button">제외 역할 선택</button>
+            <div class="chip-panel" id="excludeRolePanel"></div>
+          </div>
+        </section>
+
+        <button class="next" id="nextButton" type="button">랜덤 청소분담 시작</button>
+      </section>
+
+      <section class="step" id="stepTwo">
+        <p class="shared-notice" id="sharedNotice">공유된 청소분담 링크입니다.<br>내 침대번호를 선택하면 내 청소분담을 볼 수 있어요.</p>
+        <div class="selected-info" id="selectedInfo"></div>
+        <div class="guide-card">
+          <strong>사용방법</strong>
+          <ol>
+            <li>내 침대번호를 선택해주세요.</li>
+            <li>내 청소분담이 맨 위에 표시됩니다.</li>
+            <li>청소 후 PA 확인표에 이름 또는 싸인을 남겨주세요.</li>
+          </ol>
+        </div>
+        <div class="field">
+          <span>내 침대번호</span>
+          <div class="seat-grid" id="seatGrid"></div>
+        </div>
+        <button class="submit" type="submit">청소분담 뽑기 시작</button>
+        <button class="back-button" id="backButton" type="button">호실/날짜 다시 선택</button>
+      </section>
+    </form>
+  </main>
+
+  <div class="calendar-backdrop" id="calendarBackdrop" role="dialog" aria-modal="true" aria-labelledby="calendarTitle">
+    <section class="calendar-sheet">
+      <div class="calendar-head">
+        <button class="month-nav" id="prevMonth" type="button" aria-label="이전 달">‹</button>
+        <div class="month-title" id="calendarTitle"></div>
+        <button class="month-nav" id="nextMonth" type="button" aria-label="다음 달">›</button>
+      </div>
+      <div class="week" aria-hidden="true">
+        <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+      </div>
+      <div class="days" id="calendarDays"></div>
+      <div class="calendar-foot">
+        <button class="today-btn" id="todayButton" type="button">오늘</button>
+        <button id="closeCalendar" type="button">닫기</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const seats = ["1-1","1-2","2-1","2-2","3-1","3-2","4-1","4-2","5-1","5-2","6-1","6-2","7-1","7-2","8-1","8-2"];
+    const roleOptions = [
+      { id: 1, name: "현관 및 신발장" },
+      { id: 2, name: "세면대 얼룩·물기 제거" },
+      { id: 3, name: "세면대 거울" },
+      { id: 4, name: "샤워실 1" },
+      { id: 5, name: "샤워실 2" },
+      { id: 6, name: "샤워실 3" },
+      { id: 7, name: "변기·바닥 1" },
+      { id: 8, name: "변기·바닥 2" },
+      { id: 9, name: "변기·바닥 3" },
+      { id: 10, name: "변기·바닥 4" },
+      { id: 11, name: "휴지통 비우기" },
+      { id: 12, name: "거실 쓸기" },
+      { id: 13, name: "거실 닦기 1" },
+      { id: 14, name: "거실 닦기 2" },
+      { id: 15, name: "베란다 쓸기" },
+      { id: 16, name: "베란다 닦기" }
+    ];
+    const params = new URLSearchParams(location.search);
+    const roomInput = document.getElementById("roomInput");
+    const seatGrid = document.getElementById("seatGrid");
+    const dateDisplay = document.getElementById("dateDisplay");
+    const calendarBackdrop = document.getElementById("calendarBackdrop");
+    const calendarDays = document.getElementById("calendarDays");
+    const hasSharedRoomDate = Boolean(normalizeRoom(params.get("room")) && isValidDate(params.get("date")));
+    let selectedSeat = "";
+    let selectedDate = isValidDate(params.get("date")) ? params.get("date") : todayLocal();
+    let calendarCursor = parseDate(selectedDate);
+    const excludedSeats = new Set(parseList(params.get("excludeSeats")).filter((value) => seats.includes(value)));
+    const excludedRoles = new Set(parseList(params.get("excludeRoles")).map(Number).filter((value) => roleOptions.some((role) => role.id === value)));
+
+    function todayLocal() {
+      const d = new Date();
+      return formatDate(d);
+    }
+    function formatDate(date) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    }
+    function displayDate(value) {
+      return value.replace(/-/g, ".");
+    }
+    function parseDate(value) {
+      const [y, m, d] = value.split("-").map(Number);
+      return new Date(y, m - 1, d);
+    }
+    function isValidDate(value) {
+      return /^\d{4}-\d{2}-\d{2}$/.test(String(value || ""));
+    }
+    function normalizeRoom(value) {
+      return String(value || "").replace(/호/g, "").trim();
+    }
+    function parseList(value) {
+      return String(value || "").split(",").map((item) => item.trim()).filter(Boolean);
+    }
+    function serializeSet(set) {
+      return Array.from(set).join(",");
+    }
+    function updateDateDisplay() {
+      dateDisplay.textContent = displayDate(selectedDate);
+    }
+    function updateSelectedInfo() {
+      const room = normalizeRoom(roomInput.value);
+      document.getElementById("selectedInfo").textContent = `${room}호 · ${displayDate(selectedDate)} 청소점검`;
+    }
+    function setStep(step) {
+      const isStepTwo = step === 2;
+      document.getElementById("stepOne").classList.toggle("active", !isStepTwo);
+      document.getElementById("stepTwo").classList.toggle("active", isStepTwo);
+      document.getElementById("heroTitle").textContent = isStepTwo ? "내 침대번호 선택" : "PA 랜덤청소분담";
+      document.getElementById("heroIntro").innerHTML = isStepTwo
+        ? "내 침대번호를 선택하면<br>내 청소분담이 맨 위에 표시됩니다."
+        : "호실과 날짜를 입력하면<br>16개 청소 역할이 자동으로 배정됩니다.";
+      if (isStepTwo) updateSelectedInfo();
+    }
+    function openCalendar() {
+      calendarCursor = parseDate(selectedDate);
+      renderCalendar();
+      calendarBackdrop.classList.add("open");
+    }
+    function closeCalendar() {
+      calendarBackdrop.classList.remove("open");
+    }
+    function renderCalendar() {
+      const year = calendarCursor.getFullYear();
+      const month = calendarCursor.getMonth();
+      const first = new Date(year, month, 1);
+      const lastDate = new Date(year, month + 1, 0).getDate();
+      const today = todayLocal();
+      document.getElementById("calendarTitle").textContent = `${year}년 ${month + 1}월`;
+      calendarDays.innerHTML = "";
+      for (let i = 0; i < first.getDay(); i += 1) {
+        const blank = document.createElement("button");
+        blank.type = "button";
+        blank.className = "day blank";
+        blank.tabIndex = -1;
+        calendarDays.appendChild(blank);
+      }
+      for (let day = 1; day <= lastDate; day += 1) {
+        const value = formatDate(new Date(year, month, day));
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "day";
+        btn.textContent = day;
+        btn.classList.toggle("today", value === today);
+        btn.classList.toggle("selected", value === selectedDate);
+        btn.addEventListener("click", () => {
+          selectedDate = value;
+          updateDateDisplay();
+          updateSelectedInfo();
+          closeCalendar();
+        });
+        calendarDays.appendChild(btn);
+      }
+    }
+
+    function updateExcludeSummary() {
+      const seatCount = excludedSeats.size;
+      const roleCount = excludedRoles.size;
+      document.getElementById("excludeSeatCount").textContent = seatCount ? `제외 인원 ${seatCount}명 선택됨` : "없음";
+      document.getElementById("excludeRoleCount").textContent = roleCount ? `제외 역할 ${roleCount}개 선택됨` : "없음";
+      document.getElementById("excludeSeatNote").classList.toggle("show", seatCount > 0);
+      document.querySelectorAll("#excludeSeatPanel .select-chip").forEach((chip) => {
+        chip.classList.toggle("active", excludedSeats.has(chip.dataset.seat));
+      });
+      document.querySelectorAll("#excludeRolePanel .select-chip").forEach((chip) => {
+        chip.classList.toggle("active", excludedRoles.has(Number(chip.dataset.role)));
+      });
+      document.querySelectorAll(".seat").forEach((button) => {
+        const isExcluded = excludedSeats.has(button.dataset.seat);
+        button.disabled = isExcluded;
+        button.classList.toggle("disabled", isExcluded);
+        button.innerHTML = isExcluded ? `${button.dataset.seat}<span class="disabled-text">제외됨</span>` : button.dataset.seat;
+        if (isExcluded && selectedSeat === button.dataset.seat) selectedSeat = "";
+        button.classList.toggle("active", button.dataset.seat === selectedSeat);
+      });
+    }
+
+    function renderExcludePanels() {
+      const seatPanel = document.getElementById("excludeSeatPanel");
+      const rolePanel = document.getElementById("excludeRolePanel");
+      seatPanel.innerHTML = "";
+      rolePanel.innerHTML = "";
+      seats.forEach((seat) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "select-chip";
+        chip.textContent = seat;
+        chip.dataset.seat = seat;
+        chip.addEventListener("click", () => {
+          if (excludedSeats.has(seat)) excludedSeats.delete(seat);
+          else excludedSeats.add(seat);
+          updateExcludeSummary();
+        });
+        seatPanel.appendChild(chip);
+      });
+      roleOptions.forEach((role) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "select-chip";
+        chip.textContent = `${role.id}. ${role.name}`;
+        chip.dataset.role = role.id;
+        chip.addEventListener("click", () => {
+          if (excludedRoles.has(role.id)) excludedRoles.delete(role.id);
+          else excludedRoles.add(role.id);
+          updateExcludeSummary();
+        });
+        rolePanel.appendChild(chip);
+      });
+      updateExcludeSummary();
+    }
+
+    function appendExcludeParams(query) {
+      const seatsValue = serializeSet(excludedSeats);
+      const rolesValue = serializeSet(excludedRoles);
+      if (seatsValue) query.set("excludeSeats", seatsValue);
+      if (rolesValue) query.set("excludeRoles", rolesValue);
+      const memberCount = Number(document.getElementById("memberCountInput").value || 16);
+      query.set("memberCount", String(Math.max(1, Math.min(16, memberCount))));
+      return query;
+    }
+
+    roomInput.value = normalizeRoom(params.get("room")) || "404";
+    document.getElementById("memberCountInput").value = params.get("memberCount") || "16";
+    updateDateDisplay();
+    renderExcludePanels();
+    seats.forEach((seat) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "seat";
+      button.textContent = seat;
+      button.dataset.seat = seat;
+      button.addEventListener("click", () => {
+        selectedSeat = seat;
+        document.querySelectorAll(".seat").forEach((el) => el.classList.toggle("active", el.dataset.seat === selectedSeat));
+      });
+      seatGrid.appendChild(button);
+    });
+    updateExcludeSummary();
+
+    document.getElementById("dateButton").addEventListener("click", openCalendar);
+    document.getElementById("toggleExcludeSeats").addEventListener("click", () => {
+      document.getElementById("excludeSeatPanel").classList.toggle("open");
+    });
+    document.getElementById("toggleExcludeRoles").addEventListener("click", () => {
+      document.getElementById("excludeRolePanel").classList.toggle("open");
+    });
+    document.getElementById("closeCalendar").addEventListener("click", closeCalendar);
+    document.getElementById("todayButton").addEventListener("click", () => {
+      selectedDate = todayLocal();
+      calendarCursor = parseDate(selectedDate);
+      updateDateDisplay();
+      updateSelectedInfo();
+      closeCalendar();
+    });
+    document.getElementById("prevMonth").addEventListener("click", () => {
+      calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() - 1, 1);
+      renderCalendar();
+    });
+    document.getElementById("nextMonth").addEventListener("click", () => {
+      calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() + 1, 1);
+      renderCalendar();
+    });
+    calendarBackdrop.addEventListener("click", (event) => {
+      if (event.target === calendarBackdrop) closeCalendar();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeCalendar();
+    });
+    document.getElementById("nextButton").addEventListener("click", () => {
+      const room = normalizeRoom(roomInput.value);
+      if (!room || !selectedDate) return;
+      setStep(2);
+    });
+    document.getElementById("backButton").addEventListener("click", () => setStep(1));
+    document.getElementById("entryForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const room = normalizeRoom(roomInput.value);
+      if (!room || !selectedDate) return;
+      if (!selectedSeat) {
+        window.alert("내 침대번호를 선택해주세요.");
+        return;
+      }
+      const query = appendExcludeParams(new URLSearchParams({ room, date: selectedDate, seat: selectedSeat }));
+      location.href = `00-index.html?${query.toString()}`;
+    });
+
+    document.getElementById("sharedNotice").classList.toggle("show", hasSharedRoomDate);
+    setStep(hasSharedRoomDate ? 2 : 1);
+  </script>
+</body>
+</html>

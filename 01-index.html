@@ -1,0 +1,1395 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>청소분담 결과</title>
+  <style>
+    :root {
+      --ink: #263238;
+      --muted: #74808b;
+      --line: #e9edf2;
+      --mint: #c8f2e8;
+      --sky: #dcefff;
+      --lavender: #eadffc;
+      --cream: #fff4cc;
+      --pink: #ffe2ec;
+      --shadow: 0 18px 44px rgba(56, 72, 92, .11);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #fff 0%, #f8fcff 54%, #fffaf0 100%);
+      color: var(--ink);
+      font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+    button, input { font: inherit; }
+    button { border: 0; cursor: pointer; }
+    img { display: block; max-width: 100%; }
+    .wrap {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      padding: 18px 14px 42px;
+    }
+    .top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: end;
+      padding: 12px 2px 18px;
+    }
+    h1 { margin: 0; font-size: clamp(28px, 8vw, 44px); line-height: 1.08; font-weight: 950; }
+    .meta {
+      margin: 10px 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: #5d6a75;
+      font-weight: 850;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid var(--line);
+    }
+    .top-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .btn {
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: 15px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: #43515d;
+      font-weight: 950;
+      box-shadow: 0 8px 18px rgba(56,72,92,.06);
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, #8bded2, #bba8ef);
+      color: #fff;
+      border-color: transparent;
+    }
+    .section-title {
+      margin: 26px 2px 12px;
+      font-size: 19px;
+      font-weight: 950;
+    }
+    .mine {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 18px;
+      padding: 22px;
+      border-radius: 30px;
+      background: rgba(255,255,255,.96);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .visual {
+      min-height: 150px;
+      border-radius: 28px;
+      display: grid;
+      place-items: center;
+      font-size: 70px;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.65),
+        0 16px 30px rgba(62, 78, 92, .08);
+    }
+    .mine h2 { margin: 0; font-size: 30px; line-height: 1.12; font-weight: 950; }
+    .mine-list {
+      display: grid;
+      gap: 14px;
+    }
+    .mine.empty {
+      grid-template-columns: 1fr;
+      text-align: center;
+      color: #66727e;
+      font-weight: 900;
+      line-height: 1.55;
+    }
+    .summary { margin: 8px 0 0; color: #52616d; font-size: 16px; font-weight: 800; line-height: 1.42; }
+    .personal-card {
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #eefaf4, #fff8df);
+      border: 1px solid #e3efe6;
+      color: #4d5b66;
+    }
+    .personal-lead { margin: 0 0 12px; font-size: 15px; font-weight: 850; line-height: 1.5; }
+    .personal-lead strong { color: #2f4d49; }
+    .personal-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+    .personal-list li {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.85);
+      border: 1px solid #e7edf3;
+      font-size: 15px;
+      font-weight: 850;
+      color: #43515d;
+    }
+    .personal-note { margin: 12px 0 0; font-size: 12.5px; font-weight: 800; color: #7a8793; line-height: 1.5; }
+    .owner { margin: 10px 0 0; color: #7b8792; font-size: 14px; font-weight: 900; }
+    .checks { display: grid; gap: 8px; margin: 16px 0 0; }
+    .check {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 12px;
+      border-radius: 15px;
+      background: #f8fafc;
+      color: #43515d;
+      font-weight: 800;
+    }
+    .check input { width: 18px; height: 18px; accent-color: #7fd5c9; }
+    .detail-link {
+      margin-top: 15px;
+      padding: 0;
+      background: transparent;
+      color: #8a7bc6;
+      font-weight: 950;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    .notice-card {
+      margin: 14px 0 4px;
+      padding: 15px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #eef9f6, #fff8df);
+      border: 1px solid #e5f0e9;
+      color: #4f5d68;
+      font-size: 14px;
+      line-height: 1.55;
+      font-weight: 820;
+    }
+    .notice-card strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #2f4d49;
+      font-size: 15px;
+      font-weight: 950;
+    }
+    .notice-card p { margin: 0; }
+    .small-action {
+      min-height: 34px;
+      margin-top: 10px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid #dfe7ef;
+      color: #52616d;
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .sign-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 12px;
+      padding: 14px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #f1fbf8, #f4efff);
+      border: 1px solid var(--line);
+    }
+    .sign-summary h3 { margin: 0; font-size: 16px; }
+    .sign-summary p { margin: 4px 0 0; color: #66727e; font-size: 13px; font-weight: 850; }
+    .filter-actions { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
+    .filter-btn {
+      min-height: 34px;
+      padding: 0 11px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid #dfe7ef;
+      color: #66727e;
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .filter-btn.active {
+      background: #dff7f1;
+      border-color: #95ded3;
+      color: #12675b;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .role-card {
+      min-height: 176px;
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.95);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 28px rgba(56,72,92,.07);
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+    .role-card.mine-card { border-color: #bba8ef; box-shadow: 0 16px 34px rgba(132,112,176,.17); }
+    .role-card.sign-done { border-color: #b8eadc; background: rgba(250,255,253,.97); }
+    .mini-top { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+    .seat-badge {
+      min-width: 46px;
+      height: 32px;
+      padding: 0 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: #f4f7fb;
+      color: #52616d;
+      font-weight: 950;
+    }
+    .thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.62);
+    }
+    .role-card h3 { margin: 0; font-size: 16px; line-height: 1.25; font-weight: 950; }
+    .role-card p { margin: 0; color: #697683; font-size: 13px; line-height: 1.4; font-weight: 750; }
+    .print-sign {
+      margin: 3px 0 0;
+      color: #7a8792;
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 850;
+    }
+    .role-stack {
+      display: grid;
+      gap: 5px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .role-stack li {
+      padding: 7px 8px;
+      border-radius: 12px;
+      background: #f8fafc;
+      color: #56616d;
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.35;
+    }
+    .empty-role {
+      color: #9aa4ae;
+      font-weight: 850;
+    }
+    .sign-row {
+      display: grid;
+      gap: 7px;
+      margin-top: 4px;
+      padding-top: 8px;
+      border-top: 1px solid #edf1f5;
+    }
+    .sign-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #52616d;
+      font-size: 13px;
+      font-weight: 950;
+    }
+    .sign-check input { width: 17px; height: 17px; accent-color: #74d5c8; }
+    .status-badge {
+      width: max-content;
+      min-height: 26px;
+      padding: 0 9px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      background: #f1f4f7;
+      color: #7a8792;
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .status-badge.done {
+      background: #dff7f1;
+      color: #12675b;
+    }
+    .role-card .detail-link { margin-top: 2px; justify-self: start; font-size: 13px; }
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: end;
+      justify-content: center;
+      padding: 14px;
+      background: rgba(37,45,55,.34);
+    }
+    .modal.open { display: flex; }
+    .sheet {
+      width: min(620px, 100%);
+      max-height: min(88vh, 820px);
+      overflow: auto;
+      border-radius: 30px;
+      background: #fff;
+      box-shadow: 0 28px 80px rgba(35,45,58,.24);
+      padding: 18px;
+    }
+    .sheet-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      padding-bottom: 12px;
+    }
+    .sheet h2 { margin: 0; font-size: 24px; font-weight: 950; }
+    .sheet .owner { margin-top: 6px; }
+    .close {
+      width: 42px;
+      height: 42px;
+      border-radius: 15px;
+      background: #f5f7fa;
+      color: #5e6974;
+      font-weight: 950;
+      font-size: 22px;
+    }
+    .map {
+      min-height: 210px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #f6f7fb;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+    }
+    .map.stack {
+      gap: 8px;
+      padding: 8px;
+    }
+    .map img, .sign-image img {
+      width: 100%;
+      max-height: 360px;
+      object-fit: contain;
+      background: #fff;
+    }
+    .image-fallback {
+      min-height: 210px;
+      width: 100%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #eef9f6, #f4efff);
+      color: #82909c;
+      font-weight: 950;
+    }
+    .detail-block {
+      margin-top: 14px;
+      padding: 15px;
+      border-radius: 20px;
+      background: #f9fbfd;
+    }
+    .detail-block.sign-focus {
+      background: linear-gradient(135deg, #e8faf5, #f5efff);
+      border: 1px solid #dceee9;
+    }
+    .detail-block strong { display: block; margin-bottom: 6px; font-size: 13px; color: #66727f; }
+    .detail-block p { margin: 0; color: #394852; line-height: 1.48; font-weight: 800; }
+    .detail-block small {
+      display: block;
+      margin-top: 6px;
+      color: #66727e;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+    .sign-sheet { text-align: center; }
+    .sign-image {
+      min-height: 190px;
+      margin: 14px 0;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      display: grid;
+      place-items: center;
+    }
+    .complete-pop {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 12px;
+      border-radius: 26px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #c8f2e8, #eadffc);
+      font-size: 34px;
+      animation: pop .5s ease-out both;
+    }
+    @keyframes pop {
+      0% { transform: scale(.65); opacity: 0; }
+      70% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .sign-message {
+      margin: 0;
+      color: #52616d;
+      font-weight: 850;
+      line-height: 1.5;
+    }
+    .sign-role-info {
+      margin: 12px 0 0;
+      padding: 13px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #f1fbf8, #f7f2ff);
+      border: 1px solid #e4ecef;
+      text-align: left;
+      color: #43515d;
+      font-size: 14px;
+      font-weight: 850;
+      line-height: 1.55;
+    }
+    .sign-role-info strong {
+      display: block;
+      margin: 0 0 3px;
+      color: #263238;
+      font-size: 13px;
+      font-weight: 950;
+    }
+    .sign-role-info .quote {
+      display: block;
+      margin: 2px 0;
+      color: #6d5fbb;
+      font-weight: 950;
+    }
+    .detail-block .quote {
+      color: #6d5fbb;
+      font-weight: 950;
+    }
+    .sign-ok {
+      width: 100%;
+      min-height: 50px;
+      margin-top: 14px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #8bded2, #bba8ef);
+      color: #fff;
+      font-weight: 950;
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 30;
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: .22s ease;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      background: #263238;
+      color: #fff;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .shoe { background: #ffd5ce; }
+    .front { background: #fff1ad; }
+    .living { background: #dff2bf; }
+    .toilet { background: #dceeff; }
+    .sink { background: #ffe0eb; }
+    .shower { background: #eee4ff; }
+    .trash { background: #ded5ff; }
+    .veranda { background: #e1f3d8; }
+    .print-only { display: none; }
+    .print-page {
+      background: #fff;
+      color: #111;
+      font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+    }
+    .print-header h1,
+    .print-header p { margin: 0; }
+    .print-grid { display: grid; }
+    .print-card { border: 1px solid #d9d9d9; background: #fff; }
+    .print-seat { font-weight: 950; }
+    .print-role { font-weight: 950; }
+    .print-summary,
+    .print-sign-row { color: #333; }
+    @media (max-width: 760px) {
+      .top { grid-template-columns: 1fr; align-items: start; }
+      .top-actions { justify-content: start; }
+      .mine { grid-template-columns: 1fr; }
+      .visual { min-height: 132px; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 420px) {
+      .wrap { padding-inline: 10px; }
+      .mine { padding: 18px; border-radius: 26px; }
+      .grid { grid-template-columns: 1fr; }
+      .top-actions .btn { flex: 1; }
+    }
+    @media print {
+      @page {
+        size: A4 landscape;
+        margin: 7mm;
+      }
+      html, body {
+        width: 297mm;
+        height: 210mm;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        overflow: hidden !important;
+      }
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .wrap,
+      .modal,
+      .toast {
+        display: none !important;
+      }
+      .print-only {
+        display: block !important;
+      }
+      .print-page {
+        width: 283mm;
+        height: 196mm;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      .print-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 5mm;
+        align-items: end;
+        margin-bottom: 4mm;
+        padding-bottom: 3mm;
+        border-bottom: 1px solid #222;
+      }
+      .print-header h1 {
+        font-size: 18pt;
+        line-height: 1.1;
+        font-weight: 950;
+      }
+      .print-header p {
+        margin-top: 1mm;
+        font-size: 8.5pt;
+        line-height: 1.35;
+        color: #333;
+        font-weight: 750;
+      }
+      .print-meta {
+        text-align: right;
+        font-size: 8.5pt;
+        line-height: 1.35;
+        font-weight: 800;
+        color: #333;
+      }
+      .print-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        gap: 3mm;
+        height: 175mm;
+      }
+      .print-card {
+        min-height: 0;
+        padding: 3mm;
+        border-radius: 4mm;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        overflow: hidden;
+      }
+      .print-seat {
+        display: inline-block;
+        margin-bottom: 1.3mm;
+        padding: 1mm 2mm;
+        border-radius: 999px;
+        background: #f2f4f6;
+        font-size: 9pt;
+        line-height: 1;
+      }
+      .print-role {
+        margin: 0 0 1mm;
+        font-size: 9.5pt;
+        line-height: 1.2;
+      }
+      .print-summary,
+      .print-sign-row {
+        margin: 0;
+        font-size: 7.2pt;
+        line-height: 1.33;
+      }
+      .print-sign-row {
+        margin-top: 1.2mm;
+        padding-top: 1.2mm;
+        border-top: 1px solid #ececec;
+        font-weight: 800;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div>
+        <h1 id="pageTitle">청소분담</h1>
+        <div class="meta">
+          <span class="pill" id="dateMeta"></span>
+          <span class="pill" id="seatMeta"></span>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn primary" id="copyLink" type="button">공유 링크 복사</button>
+        <button class="btn" id="printPdf" type="button">PDF 내보내기</button>
+      </div>
+    </header>
+
+    <section>
+      <h2 class="section-title">내 청소분담</h2>
+      <article class="mine" id="mineCard"></article>
+      <div class="notice-card">
+        <strong>청소 후 확인</strong>
+      <p>청소를 마치면 실제 PA 청소확인표에서 내 역할의 싸인칸에 이름 또는 싸인을 남겨주세요.</p>
+        <p>자세히보기에서 싸인 위치를 확인할 수 있습니다.</p>
+        <button class="small-action" id="openSignGuide" type="button">확인표 보기</button>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">전체 청소분담표</h2>
+      <div class="sign-summary">
+        <div>
+          <h3>PA 확인표 싸인 현황</h3>
+          <p id="signSummaryText">완료 0 / 16</p>
+        </div>
+        <div class="filter-actions">
+          <button class="filter-btn active" id="showAllSigns" type="button">전체 보기</button>
+          <button class="filter-btn" id="showUnsignedOnly" type="button">미완료만 보기</button>
+        </div>
+      </div>
+      <div class="grid" id="assignmentGrid"></div>
+    </section>
+
+    <section>
+      <h2 class="section-title">개인구역 (전원 공통)</h2>
+      <div class="personal-card">
+        <p class="personal-lead">개인구역은 랜덤 배정이 아니라 <strong>각자 자기 자리(방)를 직접</strong> 청소합니다.</p>
+        <ul class="personal-list">
+          <li>🧹 바닥 쓸고 닦기</li>
+          <li>🪟 창틀 닦기</li>
+          <li>🛏️ 침대 계단 및 난간 닦기</li>
+        </ul>
+        <p class="personal-note">※ 공동물품의 경우 처음과 같은 자리에 있어야 합니다.</p>
+      </div>
+    </section>
+  </main>
+
+  <section class="print-only print-page" aria-hidden="true">
+    <header class="print-header">
+      <div>
+        <h1 id="printTitle">청소분담표</h1>
+        <p>같은 호실+날짜 기준 랜덤 배정표</p>
+      </div>
+      <div class="print-meta">
+        <div id="printDate"></div>
+        <div id="printRoom"></div>
+      </div>
+    </header>
+    <div class="print-grid" id="printGrid"></div>
+  </section>
+
+  <div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="sheet">
+      <div class="sheet-head">
+        <div>
+          <h2 id="modalTitle"></h2>
+          <p class="owner" id="modalOwner"></p>
+        </div>
+        <button class="close" id="modalClose" type="button" aria-label="닫기">×</button>
+      </div>
+      <div class="map" id="modalImage"></div>
+      <div class="detail-block">
+        <strong>요약</strong>
+        <p id="modalSummary"></p>
+      </div>
+      <div class="detail-block">
+        <strong>주의사항</strong>
+        <p id="modalCaution"></p>
+      </div>
+      <div class="detail-block sign-focus">
+        <strong>싸인 위치</strong>
+        <p id="modalSign"></p>
+        <button class="small-action" id="modalSignGuide" type="button">확인표 보기</button>
+      </div>
+      <div class="detail-block">
+        <strong>체크리스트</strong>
+        <div class="checks" id="modalChecks"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="signModal" role="dialog" aria-modal="true" aria-labelledby="signTitle">
+    <div class="sheet sign-sheet">
+      <div class="complete-pop" aria-hidden="true">✓</div>
+      <h2 id="signTitle">청소 완료</h2>
+      <div class="sign-image" id="signImage"></div>
+      <div class="sign-message" id="signMessage"></div>
+      <button class="small-action" id="signGuideButton" type="button">확인표 보기</button>
+      <button class="sign-ok" id="signOk" type="button">확인했어요</button>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const imageAssets = {
+      mapAll: "./images/map-all.png",
+      signGuide: "./images/sign-guide.jpg",
+      entrance: "./images/map-all.png",
+      sinkStain: "./images/세면대 1.png",
+      sinkMirror: "./images/세면대 거울.png",
+      shower1: "./images/샤워실 1.png",
+      shower2: "./images/샤워실 2.png",
+      shower3: "./images/샤워실 3.png",
+      toilet1: "./images/화장실 1.png",
+      toilet2: "./images/화장실 2.png",
+      toilet3: "./images/화장실 3.png",
+      toilet4: "./images/화장실 4.png",
+      trashAll: "./images/휴지통 전체.png",
+      livingSweep: "./images/공용바닥 A구역.png",
+      livingWipe: "./images/공용바닥 B구역.png",
+      verandaSweep: "./images/map-all.png",
+      verandaWipe: "./images/map-all.png"
+    };
+    // 이미지 점검 (뼈대 단계 - 디자인/전용 이미지는 추후 교체 예정):
+    // - map-all.png : 현관 / 베란다 쓸기·닦기 임시 이미지
+    // - sign-guide.jpg : 싸인 안내 모달, 확인표 보기 모달
+    // - 세면대 1.png : 세면대 얼룩·물기 제거 임시 이미지
+    // - 공용바닥 A구역.png : 거실 쓸기 임시 이미지
+    // - 공용바닥 B구역.png : 거실 닦기 임시 이미지
+    // - TODO: 거실 쓸기/닦기, 베란다 쓸기/닦기 전용 이미지 교체
+
+    const completeMessages = [
+      "청소 완료! 아래 싸인 위치를 확인해주세요.",
+      "수고하셨습니다. 맡은 구역을 확인한 뒤 확인표에 이름을 남겨주세요.",
+      "마지막으로 청소 확인표 싸인까지 하면 완료입니다.",
+      "깨끗하게 마무리했어요. 확인표 싸인을 잊지 마세요.",
+      "오늘 청소 끝! 확인표에 체크와 싸인을 남겨주세요."
+    ];
+
+    const seats = ["1-1","1-2","2-1","2-2","3-1","3-2","4-1","4-2","5-1","5-2","6-1","6-2","7-1","7-2","8-1","8-2"];
+    const roles = [
+      { id: 1, name: "현관 및 신발장", summary: "현관 청소 및 신발 정리", caution: "신발장 안 먼지를 제거하고, 신발은 신발장에 넣어주세요. 신발 벗는 입구 바닥까지 쓸고 닦아주세요.", signRow: "현관 청소 및 신발 정리", signGuideText: "PA 청소확인표의 “현관 청소 및 신발 정리” 칸에 싸인해주세요.", color: "shoe", previewType: "icon-card", previewIcon: "👟", previewBg: "#ffd5ce", detailImage: imageAssets.entrance, location: "현관 및 신발장", checks: ["신발장 안 먼지 제거 및 신발 정리 완료", "입구 바닥 쓸고 닦기 완료"] },
+      { id: 2, name: "세면대 얼룩·물기 제거", summary: "세면대 얼룩제거 및 주변 물기 제거", caution: "세면대 얼룩을 제거하고 주변 물기를 남기지 말아주세요.", signRow: "세면대 얼룩제거 및 주변 물기 제거", signGuideText: "PA 청소확인표의 “세면대 얼룩제거 및 주변 물기 제거” 칸에 싸인해주세요.", color: "sink", previewType: "icon-card", previewIcon: "🧼", previewBg: "#ffe0eb", detailImage: imageAssets.sinkStain, location: "세면대", checks: ["세면대 얼룩 제거 완료", "주변 물기 제거 완료"] },
+      { id: 3, name: "세면대 거울", summary: "세면대 거울 얼룩 제거", caution: "거울의 물자국과 얼룩을 닦고, 본인 세면도구를 회수해주세요.", signRow: "세면대 거울 얼룩 제거", signGuideText: "PA 청소확인표의 “세면대 거울 얼룩 제거” 칸에 싸인해주세요.", color: "sink", previewType: "icon-card", previewIcon: "🪞", previewBg: "#ffe0eb", detailImage: imageAssets.sinkMirror, location: "세면대 거울", checks: ["거울 얼룩 제거 완료", "본인 세면도구 회수 안내 확인"] },
+      { id: 4, name: "샤워실 1", summary: "머리카락 제거 및 하수구 청소·바닥 닦기", caution: "하수구 안까지 닦아야 합니다. 하수구를 꺼내고 뒤집어주세요. 바닥까지 쓸고 닦아주세요.", signRow: "머리카락 제거 및 하수구 청소·바닥 닦기", signGuideText: "PA 청소확인표의 “머리카락 제거 및 하수구 청소·바닥 닦기” 칸에 싸인해주세요.", color: "shower", previewType: "icon-card", previewIcon: "🚿", previewBg: "#eee4ff", detailImage: imageAssets.shower1, location: "샤워실 1", checks: ["머리카락 제거 및 하수구 청소 완료", "하수구 안쪽 청소·뒤집기 및 바닥 닦기 확인"] },
+      { id: 5, name: "샤워실 2", summary: "머리카락 제거 및 하수구 청소·바닥 닦기", caution: "하수구 안까지 닦아야 합니다. 하수구를 꺼내고 뒤집어주세요. 바닥까지 쓸고 닦아주세요.", signRow: "머리카락 제거 및 하수구 청소·바닥 닦기", signGuideText: "PA 청소확인표의 “머리카락 제거 및 하수구 청소·바닥 닦기” 칸에 싸인해주세요.", color: "shower", previewType: "icon-card", previewIcon: "🚿", previewBg: "#eee4ff", detailImage: imageAssets.shower2, location: "샤워실 2", checks: ["머리카락 제거 및 하수구 청소 완료", "하수구 안쪽 청소·뒤집기 및 바닥 닦기 확인"] },
+      { id: 6, name: "샤워실 3", summary: "머리카락 제거 및 하수구 청소·바닥 닦기", caution: "하수구 안까지 닦아야 합니다. 하수구를 꺼내고 뒤집어주세요. 바닥까지 쓸고 닦아주세요.", signRow: "머리카락 제거 및 하수구 청소·바닥 닦기", signGuideText: "PA 청소확인표의 “머리카락 제거 및 하수구 청소·바닥 닦기” 칸에 싸인해주세요.", color: "shower", previewType: "icon-card", previewIcon: "🚿", previewBg: "#eee4ff", detailImage: imageAssets.shower3, location: "샤워실 3", checks: ["머리카락 제거 및 하수구 청소 완료", "하수구 안쪽 청소·뒤집기 및 바닥 닦기 확인"] },
+      { id: 7, name: "변기·바닥 1", summary: "변기 닦기 및 바닥 닦기", caution: "변기 주변과 바닥 물기를 확인해주세요.", signRow: "변기 닦기 및 바닥 닦기", signGuideText: "PA 청소확인표의 “변기 닦기 및 바닥 닦기” 칸에 싸인해주세요.", color: "toilet", previewType: "icon-card", previewIcon: "🚽", previewBg: "#dceeff", detailImage: imageAssets.toilet1, location: "화장실 1", checks: ["변기 닦기 완료", "바닥 닦기 완료"] },
+      { id: 8, name: "변기·바닥 2", summary: "변기 닦기 및 바닥 닦기", caution: "변기 주변과 바닥 물기를 확인해주세요.", signRow: "변기 닦기 및 바닥 닦기", signGuideText: "PA 청소확인표의 “변기 닦기 및 바닥 닦기” 칸에 싸인해주세요.", color: "toilet", previewType: "icon-card", previewIcon: "🚽", previewBg: "#dceeff", detailImage: imageAssets.toilet2, location: "화장실 2", checks: ["변기 닦기 완료", "바닥 닦기 완료"] },
+      { id: 9, name: "변기·바닥 3", summary: "변기 닦기 및 바닥 닦기", caution: "변기 주변과 바닥 물기를 확인해주세요.", signRow: "변기 닦기 및 바닥 닦기", signGuideText: "PA 청소확인표의 “변기 닦기 및 바닥 닦기” 칸에 싸인해주세요.", color: "toilet", previewType: "icon-card", previewIcon: "🚽", previewBg: "#dceeff", detailImage: imageAssets.toilet3, location: "화장실 3", checks: ["변기 닦기 완료", "바닥 닦기 완료"] },
+      { id: 10, name: "변기·바닥 4", summary: "변기 닦기 및 바닥 닦기", caution: "변기 주변과 바닥 물기를 확인해주세요.", signRow: "변기 닦기 및 바닥 닦기", signGuideText: "PA 청소확인표의 “변기 닦기 및 바닥 닦기” 칸에 싸인해주세요.", color: "toilet", previewType: "icon-card", previewIcon: "🚽", previewBg: "#dceeff", detailImage: imageAssets.toilet4, location: "화장실 4", checks: ["변기 닦기 완료", "바닥 닦기 완료"] },
+      { id: 11, name: "휴지통 비우기", summary: "생활관 전체 휴지통 비우기", caution: "화장실과 세면대 주변 휴지통을 모두 비우고 뒤집어주세요. 냉장고 온도는 ‘중’인지 확인하고, 냉장고 주변 쓰레기만 확인해주세요. 개인 음식물은 건드리지 않습니다.", signRow: "생활관 전체 휴지통 비우기", signGuideText: "PA 청소확인표의 “생활관 전체 휴지통 비우기” 칸에 싸인해주세요.", color: "trash", previewType: "icon-card", previewIcon: "🗑️", previewBg: "#ded5ff", detailImage: imageAssets.trashAll, location: "생활관 전체 휴지통", checks: ["생활관 전체 휴지통 비우기 완료", "휴지통 뒤집기 및 냉장고 온도 ‘중’ 확인"] },
+      { id: 12, name: "거실 쓸기", summary: "거실 바닥 쓸기", caution: "거실 전체 바닥의 먼지와 머리카락을 빗자루로 쓸어 모아주세요. 구석과 가장자리까지 확인해주세요.", signRow: "거실 쓸기", signGuideText: "PA 청소확인표의 “거실 쓸기” 칸에 싸인해주세요.", color: "living", previewType: "icon-card", previewIcon: "🧹", previewBg: "#dff2bf", detailImage: imageAssets.livingSweep, location: "거실", checks: ["거실 전체 바닥 쓸기 완료", "구석·가장자리 먼지 제거 확인"] },
+      { id: 13, name: "거실 닦기 1", summary: "거실 바닥 닦기", caution: "거실 전체 바닥을 물걸레로 닦아주세요. 쓸기 담당자가 쓴 뒤에 닦아주세요.", signRow: "거실 닦기", signGuideText: "PA 청소확인표의 “거실 닦기” 칸에 싸인해주세요.", color: "living", previewType: "icon-card", previewIcon: "🧽", previewBg: "#dff2bf", detailImage: imageAssets.livingWipe, location: "거실", checks: ["거실 전체 바닥 닦기 완료"] },
+      { id: 14, name: "거실 닦기 2", summary: "거실 바닥 닦기", caution: "거실 전체 바닥을 물걸레로 닦아주세요. 쓸기 담당자가 쓴 뒤에 닦아주세요.", signRow: "거실 닦기", signGuideText: "PA 청소확인표의 “거실 닦기” 칸에 싸인해주세요.", color: "living", previewType: "icon-card", previewIcon: "🧽", previewBg: "#dff2bf", detailImage: imageAssets.livingWipe, location: "거실", checks: ["거실 전체 바닥 닦기 완료"] },
+      { id: 15, name: "베란다 쓸기", summary: "베란다 바닥 쓸기", caution: "베란다 전체 바닥의 먼지와 이물질을 빗자루로 쓸어 모아주세요.", signRow: "베란다 쓸기", signGuideText: "PA 청소확인표의 “베란다 쓸기” 칸에 싸인해주세요.", color: "veranda", previewType: "icon-card", previewIcon: "🍃", previewBg: "#e1f3d8", detailImage: imageAssets.verandaSweep, location: "베란다", checks: ["베란다 전체 바닥 쓸기 완료"] },
+      { id: 16, name: "베란다 닦기", summary: "베란다 바닥 닦기", caution: "베란다 전체 바닥을 물걸레로 닦아주세요. 쓸기 담당자가 쓴 뒤에 닦아주세요.", signRow: "베란다 닦기", signGuideText: "PA 청소확인표의 “베란다 닦기” 칸에 싸인해주세요.", color: "veranda", previewType: "icon-card", previewIcon: "🌿", previewBg: "#e1f3d8", detailImage: imageAssets.verandaWipe, location: "베란다", checks: ["베란다 전체 바닥 닦기 완료"] }
+    ];
+    roles.forEach((role) => {
+      role.group = roleGroup(role);
+      role.signText = role.signText || (role.signRow ? `PA 청소확인표의 “${role.signRow}” 칸에 이름 또는 싸인을 남겨주세요.` : "");
+      role.signNote = role.signNote || signSheetNote(role);
+    });
+
+    const params = new URLSearchParams(location.search);
+    const room = normalizeRoom(params.get("room")) || "404";
+    const date = isValidDate(params.get("date")) ? params.get("date") : todayLocal();
+    const seat = seats.includes(params.get("seat")) ? params.get("seat") : "1-1";
+    const excludeSeats = parseList(params.get("excludeSeats")).filter((value) => seats.includes(value));
+    const excludeRoles = parseList(params.get("excludeRoles")).map(Number).filter((value) => roles.some((role) => role.id === value));
+    const assignments = buildAssignmentsComplex(room, date, { excludedSeats: excludeSeats, excludedRoles: excludeRoles });
+    const mine = assignments.find((item) => item.seat === seat) || { seat, roles: [] };
+    const signNoticeKey = `signNotice_${room}_${date}_${seat}`;
+    const signOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+    let showUnsignedOnly = false;
+    let activeSignRole = mine.roles[0] || null;
+
+    document.getElementById("pageTitle").textContent = `${room}호 청소분담`;
+    document.getElementById("dateMeta").textContent = `${displayDate(date)} 청소점검`;
+    document.getElementById("seatMeta").textContent = `내 침대번호 ${seat}`;
+
+    renderMine();
+    renderGrid();
+    renderPrintPage();
+
+    document.getElementById("copyLink").addEventListener("click", copyCurrentLink);
+    document.getElementById("printPdf").addEventListener("click", exportPDF);
+    document.getElementById("openSignGuide").addEventListener("click", () => openSignGuideModal(activeSignRole));
+    document.getElementById("showAllSigns").addEventListener("click", () => {
+      showUnsignedOnly = false;
+      renderGrid();
+    });
+    document.getElementById("showUnsignedOnly").addEventListener("click", () => {
+      showUnsignedOnly = true;
+      renderGrid();
+    });
+    document.getElementById("modalSignGuide").addEventListener("click", () => openSignGuideModal(activeSignRole));
+    document.getElementById("modalClose").addEventListener("click", closeDetailModal);
+    document.getElementById("detailModal").addEventListener("click", (event) => {
+      if (event.target.id === "detailModal") closeDetailModal();
+    });
+    document.getElementById("signOk").addEventListener("click", closeSignModal);
+    document.getElementById("signGuideButton").addEventListener("click", () => openSignGuideModal(activeSignRole));
+    document.getElementById("signModal").addEventListener("click", (event) => {
+      if (event.target.id === "signModal") closeSignModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeDetailModal();
+        closeSignModal();
+      }
+    });
+
+    function normalizeRoom(value) {
+      return String(value || "").replace(/호/g, "").trim();
+    }
+    function todayLocal() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    }
+    function isValidDate(value) {
+      return /^\d{4}-\d{2}-\d{2}$/.test(String(value || ""));
+    }
+    function displayDate(value) {
+      return value.replace(/-/g, ".");
+    }
+    function parseList(value) {
+      return String(value || "").split(",").map((item) => item.trim()).filter(Boolean);
+    }
+    function xmur3(str) {
+      let h = 1779033703 ^ str.length;
+      for (let i = 0; i < str.length; i += 1) {
+        h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+        h = (h << 13) | (h >>> 19);
+      }
+      return function() {
+        h = Math.imul(h ^ (h >>> 16), 2246822507);
+        h = Math.imul(h ^ (h >>> 13), 3266489909);
+        return (h ^= h >>> 16) >>> 0;
+      };
+    }
+    function mulberry32(a) {
+      return function() {
+        let t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function seededRandom(seedText) {
+      return mulberry32(xmur3(seedText)());
+    }
+    function shuffleSeeded(list, seedText) {
+      const rand = seededRandom(seedText);
+      const arr = list.slice();
+      for (let i = arr.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(rand() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+    // 복합 시드 기반 공정 랜덤:
+    // 호실·날짜·침대번호·역할번호·그룹 보정값을 함께 계산해 고정 랜덤 점수로 배정합니다.
+    function buildAssignmentsComplex(roomValue, dateValue, options = {}) {
+      const excludedSeatSet = new Set(options.excludedSeats || []);
+      const excludedRoleSet = new Set((options.excludedRoles || []).map(Number));
+      const activeSeats = seats.filter((seatValue) => !excludedSeatSet.has(seatValue));
+      const activeRoles = roles.filter((role) => !excludedRoleSet.has(role.id));
+      if (!activeSeats.length) return [];
+
+      let bestAssignments = [];
+      let bestScore = Infinity;
+      for (let attempt = 0; attempt < 30; attempt += 1) {
+        const seedBase = `${roomValue}|${dateValue}|cleaning-v2|attempt-${attempt}`;
+        const candidate = buildAssignmentsForSeed(activeSeats, activeRoles, seedBase);
+        const score = patternScore(candidate);
+        if (score < bestScore) {
+          bestScore = score;
+          bestAssignments = candidate;
+        }
+      }
+      return bestAssignments;
+    }
+
+    function buildAssignmentsForSeed(activeSeats, activeRoles, seedBase) {
+      const result = activeSeats.map((seatValue) => ({ seat: seatValue, roles: [] }));
+      const assignedRoleIds = new Set();
+      const firstRoundLimit = Math.min(activeSeats.length, activeRoles.length);
+
+      for (let round = 0; round < firstRoundLimit; round += 1) {
+        const pair = availablePairs(result, activeRoles, assignedRoleIds, seedBase)
+          .filter((item) => item.assignment.roles.length === 0)
+          .sort((a, b) => a.score - b.score)[0];
+        if (!pair) break;
+        pair.assignment.roles.push(pair.role);
+        assignedRoleIds.add(pair.role.id);
+      }
+
+      while (assignedRoleIds.size < activeRoles.length) {
+        const pair = availablePairs(result, activeRoles, assignedRoleIds, seedBase)
+          .sort((a, b) => a.score - b.score)[0];
+        if (!pair) break;
+        pair.assignment.roles.push(pair.role);
+        assignedRoleIds.add(pair.role.id);
+      }
+
+      return result;
+    }
+
+    function availablePairs(assignments, activeRoles, assignedRoleIds, seedBase) {
+      const minLoad = Math.min(...assignments.map((item) => item.roles.length));
+      const maxAllowedLoad = minLoad + 1;
+      const pairs = [];
+      assignments.forEach((assignment) => {
+        if (assignment.roles.length > maxAllowedLoad) return;
+        activeRoles.forEach((role) => {
+          if (assignedRoleIds.has(role.id)) return;
+          pairs.push({
+            assignment,
+            role,
+            score: pairScore(seedBase, assignment.seat, role, assignment.roles.length)
+          });
+        });
+      });
+      return pairs;
+    }
+
+    function pairScore(seedBase, seatValue, role, currentLoad) {
+      const seatIndex = seats.indexOf(seatValue);
+      const groupNoise = hashToNumber(`${seedBase}|${role.group}|${seatValue}|group-mix`);
+      const positionNoise = hashToNumber(`${seedBase}|${seatIndex}|${role.id}|position-mix`);
+      const loadNoise = hashToNumber(`${seedBase}|${seatValue}|${currentLoad}|load-balance`);
+      let score =
+        hashToNumber(`${seedBase}|${seatValue}|${role.id}|pair`) +
+        hashToNumber(`${seedBase}|${role.id}|${seatValue}|reverse`) * 0.37 +
+        hashToNumber(`${seedBase}|${seatValue}|seatBias`) * 0.11 +
+        hashToNumber(`${seedBase}|${role.id}|roleBias`) * 0.07 +
+        groupNoise * 0.19 +
+        positionNoise * 0.13 +
+        loadNoise * 0.17 +
+        currentLoad * 0.43;
+
+      if (["toilet", "shower", "sink"].includes(role.group)) {
+        score += hashToNumber(`${seedBase}|${role.group}|${Math.floor(seatIndex / 2)}|hard-zone`) * 0.21;
+      }
+      return score;
+    }
+
+    function patternScore(assignments) {
+      const rolePositions = [];
+      assignments.forEach((assignment) => {
+        assignment.roles.forEach((role) => {
+          rolePositions.push({ seat: assignment.seat, seatIndex: seats.indexOf(assignment.seat), role });
+        });
+      });
+
+      let penalty = 0;
+      const groups = ["toilet", "shower", "sink", "trash"];
+      groups.forEach((group) => {
+        const positions = rolePositions
+          .filter((item) => item.role.group === group)
+          .map((item) => item.seatIndex)
+          .sort((a, b) => a - b);
+        for (let i = 1; i < positions.length; i += 1) {
+          const gap = positions[i] - positions[i - 1];
+          if (gap <= 2) penalty += (3 - gap) * 5;
+        }
+        if (positions.length >= 3) {
+          const allFront = positions.every((pos) => pos <= 7);
+          const allBack = positions.every((pos) => pos >= 8);
+          if (allFront || allBack) penalty += 18;
+        }
+      });
+
+      const sortedBySeat = rolePositions.slice().sort((a, b) => a.seatIndex - b.seatIndex);
+      let orderedPairs = 0;
+      for (let i = 1; i < sortedBySeat.length; i += 1) {
+        if (sortedBySeat[i].role.id > sortedBySeat[i - 1].role.id) orderedPairs += 1;
+      }
+      const monotonicRatio = sortedBySeat.length > 1 ? orderedPairs / (sortedBySeat.length - 1) : 0;
+      if (monotonicRatio > 0.72 || monotonicRatio < 0.28) penalty += 16;
+
+      const trash = rolePositions.find((item) => item.role.group === "trash");
+      if (trash && trash.seatIndex >= 12) penalty += 7;
+      if (trash && trash.seatIndex <= 2) penalty += 4;
+
+      const loads = assignments.map((item) => item.roles.length);
+      penalty += (Math.max(...loads) - Math.min(...loads)) * 9;
+      return penalty;
+    }
+
+    function roleGroup(role) {
+      if (role.id === 1) return "shoe";
+      if (role.id === 2) return "sink";
+      if (role.id === 3) return "mirror";
+      if (role.id >= 4 && role.id <= 6) return "shower";
+      if (role.id >= 7 && role.id <= 10) return "toilet";
+      if (role.id === 11) return "trash";
+      if (role.id === 12) return "livingSweep";
+      if (role.id >= 13 && role.id <= 14) return "livingWipe";
+      if (role.id === 15) return "verandaSweep";
+      if (role.id === 16) return "verandaWipe";
+      return role.color || "etc";
+    }
+
+    function signSheetNote(role) {
+      if (role.id === 1) return "현관 청소 및 신발 정리 칸에 1명이 싸인합니다.";
+      if (role.id === 2) return "세면대 얼룩제거 및 주변 물기 제거 칸에 1명이 싸인합니다.";
+      if (role.id === 3) return "세면대 거울 얼룩 제거 칸에 1명이 싸인합니다.";
+      if (role.id >= 4 && role.id <= 6) return "머리카락 제거 및 하수구 청소·바닥 닦기 영역의 세 칸에 3명이 각각 싸인합니다.";
+      if (role.id >= 7 && role.id <= 10) return "변기 닦기 및 바닥 닦기 영역의 네 칸에 4명이 각각 싸인합니다.";
+      if (role.id === 11) return "생활관 전체 휴지통 비우기 칸에 1명이 싸인합니다.";
+      if (role.id === 12) return "거실 쓸기 칸에 1명이 싸인합니다.";
+      if (role.id >= 13 && role.id <= 14) return "거실 닦기 영역의 두 칸에 2명이 각각 싸인합니다.";
+      if (role.id === 15) return "베란다 쓸기 칸에 1명이 싸인합니다.";
+      if (role.id === 16) return "베란다 닦기 칸에 1명이 싸인합니다.";
+      return "";
+    }
+
+    function hashToNumber(str) {
+      let h1 = 0xdeadbeef;
+      let h2 = 0x41c6ce57;
+
+      for (let i = 0; i < str.length; i += 1) {
+        const ch = str.charCodeAt(i);
+        h1 = Math.imul(h1 ^ ch, 2654435761);
+        h2 = Math.imul(h2 ^ ch, 1597334677);
+      }
+
+      h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+      h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+      h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+      h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+
+      const result = 4294967296 * (2097151 & h2) + (h1 >>> 0);
+      return (result % 1000000) / 1000000;
+    }
+    function renderMine() {
+      const mineCard = document.getElementById("mineCard");
+      if (!mine.roles.length) {
+        mineCard.className = "mine empty";
+        mineCard.innerHTML = "오늘 배정된 청소 역할이 없습니다.";
+        return;
+      }
+      mineCard.className = "mine";
+      if (mine.roles.length === 1) {
+        const role = mine.roles[0];
+        mineCard.innerHTML = `
+          ${previewCardHtml(role, "visual")}
+          <div>
+            <h2>${escapeHtml(role.name)}</h2>
+            <p class="summary">${escapeHtml(role.summary)}</p>
+            <p class="owner">담당: ${escapeHtml(mine.seat)}</p>
+            <p class="print-sign">싸인 위치: PA 확인표의 "${escapeHtml(role.signRow)}" 칸을 확인해주세요.</p>
+            <div class="checks">${role.checks.map((text, index) => checkHtml(role, mine.seat, text, index)).join("")}</div>
+            ${signControlHtml(role, mine.seat)}
+            <button class="detail-link" type="button" data-role="${role.id}" data-seat="${mine.seat}">자세히보기</button>
+          </div>
+        `;
+      } else {
+        mineCard.innerHTML = `
+          <div class="mine-list" style="grid-column:1 / -1">
+            <h2>내 청소분담 ${mine.roles.length}개</h2>
+            ${mine.roles.map((role) => `
+              <article class="role-card mine-card">
+                <div class="mini-top">
+                  <span class="seat-badge">${escapeHtml(mine.seat)}</span>
+                  ${previewCardHtml(role, "thumb")}
+                </div>
+                <h3>${escapeHtml(role.name)}</h3>
+                <p>${escapeHtml(role.summary)}</p>
+                <p class="print-sign">싸인 위치: ${escapeHtml(role.signRow)}</p>
+                <div class="checks">${role.checks.map((text, index) => checkHtml(role, mine.seat, text, index)).join("")}</div>
+                ${signControlHtml(role, mine.seat)}
+                <button class="detail-link" type="button" data-role="${role.id}" data-seat="${mine.seat}">자세히보기</button>
+              </article>
+            `).join("")}
+          </div>
+        `;
+      }
+      bindChecks(mineCard, mine.roles[0], mine.seat);
+      bindSignChecks(mineCard);
+      mineCard.querySelectorAll(".detail-link").forEach((btn) => {
+        const role = roles.find((item) => String(item.id) === btn.dataset.role);
+        btn.addEventListener("click", () => openDetailModal(role, mine.seat));
+      });
+    }
+    function renderGrid() {
+      const grid = document.getElementById("assignmentGrid");
+      const rows = assignmentRowsBySignOrder();
+      const visibleRows = showUnsignedOnly ? rows.filter((row) => !isSignChecked(row.role, row.seat)) : rows;
+      updateSignSummary(rows);
+      document.getElementById("showAllSigns").classList.toggle("active", !showUnsignedOnly);
+      document.getElementById("showUnsignedOnly").classList.toggle("active", showUnsignedOnly);
+      grid.innerHTML = visibleRows.map(({ seat: seatValue, role }) => {
+        const signed = isSignChecked(role, seatValue);
+        return `
+        <article class="role-card ${seatValue === seat ? "mine-card" : ""} ${signed ? "sign-done" : ""}">
+          <div class="mini-top">
+            <span class="seat-badge">${escapeHtml(seatValue)}</span>
+            ${previewCardHtml(role, "thumb")}
+          </div>
+          <h3>${escapeHtml(role.name)}</h3>
+          <p>담당: ${escapeHtml(seatValue)}</p>
+          <p>${escapeHtml(role.summary)}</p>
+          <p class="print-sign">싸인 위치: ${escapeHtml(role.signRow)}</p>
+          ${signControlHtml(role, seatValue)}
+          <button class="detail-link" type="button" data-role="${role.id}" data-seat="${seatValue}">자세히보기</button>
+        </article>
+      `;
+      }).join("");
+      grid.querySelectorAll(".detail-link").forEach((btn) => {
+        const role = roles.find((item) => String(item.id) === btn.dataset.role);
+        btn.addEventListener("click", () => openDetailModal(role, btn.dataset.seat));
+      });
+      bindSignChecks(grid);
+    }
+    function renderPrintPage() {
+      const rows = assignmentRowsBySignOrder();
+      document.getElementById("printTitle").textContent = `${room}호 청소분담표`;
+      document.getElementById("printDate").textContent = `${displayDate(date)} 청소점검 기준`;
+      document.getElementById("printRoom").textContent = `호실 ${room}호`;
+      document.getElementById("printGrid").innerHTML = rows.map(({ seat: seatValue, role }) => `
+        <article class="print-card">
+          <div class="print-seat">담당 ${escapeHtml(seatValue)}</div>
+          <h2 class="print-role">${escapeHtml(role.name)}</h2>
+          <p class="print-summary">${escapeHtml(role.summary)}</p>
+          <p class="print-sign-row">싸인칸: ${escapeHtml(role.signRow || "자세히보기 확인")}</p>
+        </article>
+      `).join("");
+    }
+    function exportPDF() {
+      renderPrintPage();
+      document.body.classList.add("print-mode");
+      window.print();
+      window.setTimeout(() => {
+        document.body.classList.remove("print-mode");
+      }, 500);
+    }
+    function signControlHtml(role, seatValue) {
+      const signed = isSignChecked(role, seatValue);
+      return `
+        <span class="status-badge ${signed ? "done" : ""}">${signed ? "싸인 완료" : "싸인 미완료"}</span>
+        <div class="sign-row">
+          <label class="sign-check"><input type="checkbox" data-sign-role="${role.id}" data-sign-seat="${escapeAttr(seatValue)}" ${signed ? "checked" : ""}>싸인 확인</label>
+        </div>
+      `;
+    }
+    function bindSignChecks(root) {
+      root.querySelectorAll("input[data-sign-role]").forEach((input) => {
+        input.addEventListener("change", () => {
+          const role = roles.find((item) => String(item.id) === input.dataset.signRole);
+          setSignChecked(role, input.dataset.signSeat, input.checked);
+          renderMine();
+          renderGrid();
+        });
+      });
+    }
+    function assignmentRowsBySignOrder() {
+      const rows = [];
+      assignments.forEach(({ seat: seatValue, roles: seatRoles }) => {
+        seatRoles.forEach((role) => rows.push({ seat: seatValue, role }));
+      });
+      const orderMap = new Map(signOrder.map((id, index) => [id, index]));
+      return rows.sort((a, b) => {
+        const aOrder = orderMap.has(a.role.id) ? orderMap.get(a.role.id) : 999;
+        const bOrder = orderMap.has(b.role.id) ? orderMap.get(b.role.id) : 999;
+        return aOrder - bOrder || a.seat.localeCompare(b.seat, "ko");
+      });
+    }
+    function signCheckKey(role, seatValue) {
+      return `sign-check:${room}:${date}:${role.id}:${seatValue}`;
+    }
+    function isSignChecked(role, seatValue) {
+      return localStorage.getItem(signCheckKey(role, seatValue)) === "1";
+    }
+    function setSignChecked(role, seatValue, checked) {
+      localStorage.setItem(signCheckKey(role, seatValue), checked ? "1" : "0");
+    }
+    function updateSignSummary(rows) {
+      const done = rows.filter((row) => isSignChecked(row.role, row.seat)).length;
+      document.getElementById("signSummaryText").textContent = `완료 ${done}명 / 미완료 ${rows.length - done}명`;
+    }
+    function checkKey(role, seatValue, index) {
+      return `clean-check:${room}:${date}:${seatValue}:${role.id}:${index}`;
+    }
+    function checkHtml(role, seatValue, text, index) {
+      const key = checkKey(role, seatValue, index);
+      const checked = localStorage.getItem(key) === "1" ? " checked" : "";
+      return `<label class="check"><input type="checkbox" data-role="${role.id}" data-seat="${escapeAttr(seatValue)}" data-index="${index}" data-key="${escapeAttr(key)}"${checked}><span>${escapeHtml(text)}</span></label>`;
+    }
+    function bindChecks(root, role, seatValue) {
+      root.querySelectorAll("input[type='checkbox'][data-key]").forEach((input) => {
+        input.addEventListener("change", () => {
+          localStorage.setItem(input.dataset.key, input.checked ? "1" : "0");
+          const inputRole = roles.find((item) => String(item.id) === input.dataset.role) || role;
+          const inputSeat = input.dataset.seat || seatValue;
+          syncSameCheck(inputRole, inputSeat, input.dataset.index, input.checked);
+          maybeShowSignNotice(inputRole, inputSeat);
+        });
+      });
+    }
+    function syncSameCheck(role, seatValue, index, checked) {
+      document.querySelectorAll(`input[data-role="${role.id}"][data-seat="${cssEscape(seatValue)}"][data-index="${index}"]`).forEach((el) => {
+        el.checked = checked;
+      });
+    }
+    function maybeShowSignNotice(role, seatValue) {
+      if (!mine.roles.some((mineRole) => mineRole.id === role.id) || seatValue !== mine.seat) return;
+      if (localStorage.getItem(signNoticeKey) === "1") return;
+      const done = role.checks.every((_, index) => localStorage.getItem(checkKey(role, seatValue, index)) === "1");
+      if (!done) return;
+      localStorage.setItem(signNoticeKey, "1");
+      openSignModal(role);
+    }
+    function openDetailModal(role, seatValue) {
+      activeSignRole = role;
+      document.getElementById("modalTitle").textContent = role.name;
+      document.getElementById("modalOwner").textContent = `담당 침대번호: ${seatValue}`;
+      document.getElementById("modalSummary").textContent = `${role.location} - ${role.summary}`;
+      document.getElementById("modalCaution").textContent = role.caution;
+      document.getElementById("modalSign").innerHTML = signLocationHtml(role, "detail");
+      document.getElementById("modalImage").innerHTML = imagesHtml(role.detailImages || role.detailImage, `${role.name} 위치 안내 이미지`);
+      document.getElementById("modalChecks").innerHTML = role.checks.map((text, index) => checkHtml(role, seatValue, text, index)).join("");
+      bindChecks(document.getElementById("modalChecks"), role, seatValue);
+      document.getElementById("detailModal").classList.add("open");
+    }
+    function closeDetailModal() {
+      document.getElementById("detailModal").classList.remove("open");
+      renderMine();
+    }
+    function openSignModal(role = activeSignRole) {
+      const rand = Math.floor(Math.random() * completeMessages.length);
+      activeSignRole = role || activeSignRole;
+      document.getElementById("signTitle").textContent = "청소 완료";
+      document.getElementById("signMessage").innerHTML = completionMessageHtml(activeSignRole, completeMessages[rand]);
+      document.getElementById("signImage").innerHTML = imageHtml(imageAssets.signGuide, "청소 확인표 싸인 안내 이미지");
+      document.getElementById("signModal").classList.add("open");
+    }
+    function openSignGuideModal(roleOrMessage = activeSignRole) {
+      const role = typeof roleOrMessage === "object" && roleOrMessage ? roleOrMessage : activeSignRole;
+      const message = typeof roleOrMessage === "string" ? roleOrMessage : signGuideMessageHtml(role);
+      activeSignRole = role || activeSignRole;
+      document.getElementById("signTitle").textContent = "PA 확인표 보기";
+      document.getElementById("signMessage").innerHTML = message;
+      document.getElementById("signImage").innerHTML = imageHtml(imageAssets.signGuide, "PA 청소확인표 싸인 위치 안내 이미지");
+      document.getElementById("signModal").classList.add("open");
+    }
+    function completionMessageHtml(role, leadText) {
+      if (!role) {
+        return `
+          <span>${escapeHtml(leadText || "청소 완료!")}</span>
+          <div class="sign-role-info">싸인 위치를 확인할 수 없습니다. 자세히보기를 확인해주세요.</div>
+        `;
+      }
+      return `
+        <span>${escapeHtml(leadText || "청소 완료!")}</span>
+        <div class="sign-role-info">
+          <strong>내 역할</strong>
+          ${escapeHtml(role.name)}
+          <strong style="margin-top:10px">싸인 위치</strong>
+          PA 청소확인표의
+          <span class="quote">“${escapeHtml(role.signRow || "싸인 위치 확인 필요")}”</span>
+          칸에 이름 또는 싸인을 남겨주세요.
+          ${role.signNote ? `<span style="display:block;margin-top:6px;color:#66727e">${escapeHtml(role.signNote)}</span>` : ""}
+        </div>
+      `;
+    }
+    function signGuideMessageHtml(role) {
+      if (!role) {
+        return `<div class="sign-role-info">싸인 위치를 확인할 수 없습니다. 자세히보기를 확인해주세요.</div>`;
+      }
+      return `
+        <div class="sign-role-info">
+          <strong>내 역할</strong>
+          ${escapeHtml(role.name)}
+          <strong style="margin-top:10px">싸인 위치</strong>
+          <span class="quote">“${escapeHtml(role.signRow || "싸인 위치 확인 필요")}”</span>
+          ${role.signRow ? "칸에 이름 또는 싸인을 남겨주세요." : "자세히보기를 확인해주세요."}
+          ${role.signNote ? `<span style="display:block;margin-top:6px;color:#66727e">${escapeHtml(role.signNote)}</span>` : ""}
+        </div>
+      `;
+    }
+    function signLocationHtml(role, mode = "default") {
+      if (!role || !role.signRow) {
+        return "싸인 위치를 확인할 수 없습니다. 자세히보기를 확인해주세요.";
+      }
+      if (mode === "detail") {
+        return `청소 완료 후 PA 청소확인표의<br><span class="quote">“${escapeHtml(role.signRow)}”</span><br>칸에 싸인해주세요.${role.signNote ? `<br><small>${escapeHtml(role.signNote)}</small>` : ""}`;
+      }
+      return `PA 청소확인표의 “${escapeHtml(role.signRow)}” 칸에 이름 또는 싸인을 남겨주세요.`;
+    }
+    function closeSignModal() {
+      document.getElementById("signModal").classList.remove("open");
+    }
+    function imageHtml(src, alt) {
+      if (!src) return `<div class="image-fallback">이미지 준비중</div>`;
+      return `<img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'image-fallback',textContent:'이미지 준비중'}))">`;
+    }
+    function imagesHtml(srcList, alt) {
+      const list = Array.isArray(srcList) ? srcList.filter(Boolean) : [srcList].filter(Boolean);
+      if (!list.length) return imageHtml("", alt);
+      return list.map((src, index) => imageHtml(src, list.length > 1 ? `${alt} ${index + 1}` : alt)).join("");
+    }
+    function previewCardHtml(role, className) {
+      const bg = role.previewBg || "#eef9f6";
+      return `<div class="${className} ${role.color}" style="background:${escapeAttr(bg)}" aria-label="${escapeAttr(role.name)} 대표 아이콘">${escapeHtml(role.previewIcon || "")}</div>`;
+    }
+    async function copyCurrentLink() {
+      const query = new URLSearchParams({ room, date });
+      if (excludeSeats.length) query.set("excludeSeats", excludeSeats.join(","));
+      if (excludeRoles.length) query.set("excludeRoles", excludeRoles.join(","));
+      const url = new URL(`index.html?${query.toString()}`, location.href).href;
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast("공유 링크를 복사했어요");
+      } catch (error) {
+        const temp = document.createElement("input");
+        temp.value = url;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        temp.remove();
+        showToast("공유 링크를 복사했어요");
+      }
+    }
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 1700);
+    }
+    function cssEscape(value) {
+      if (window.CSS && CSS.escape) return CSS.escape(value);
+      return String(value).replace(/["\\]/g, "\\$&");
+    }
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[char]));
+    }
+    function escapeAttr(value) {
+      return escapeHtml(value).replace(/`/g, "&#96;");
+    }
+  </script>
+</body>
+</html>

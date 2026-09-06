@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>청소 역할 섞는 중</title>
+  <style>
+    :root {
+      --ink: #263238;
+      --muted: #7a8793;
+      --mint: #c9f3ea;
+      --sky: #ddecff;
+      --lavender: #e9defc;
+      --cream: #fff5cf;
+      --pink: #ffe1eb;
+      --shadow: 0 22px 50px rgba(55, 73, 93, .13);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 12%, rgba(221,236,255,.95) 0 110px, transparent 112px),
+        linear-gradient(180deg, #fff 0%, #f8fcff 52%, #fff9e8 100%);
+      color: var(--ink);
+      font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+    .stage {
+      width: min(460px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 42px 18px;
+      display: grid;
+      align-content: center;
+      text-align: center;
+    }
+    h1 { margin: 0; font-size: 32px; line-height: 1.15; font-weight: 950; }
+    .date { margin: 12px 0 0; color: var(--muted); font-weight: 850; }
+    .machine {
+      position: relative;
+      height: 260px;
+      margin: 36px 0 24px;
+      filter: drop-shadow(var(--shadow));
+    }
+    .card {
+      position: absolute;
+      left: calc(50% - 74px);
+      top: 70px;
+      width: 148px;
+      height: 176px;
+      border-radius: 30px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.7);
+      font-size: 46px;
+      animation: shuffle 1.65s cubic-bezier(.34,.02,.18,1) infinite;
+    }
+    .card:nth-child(1) { background: var(--mint); animation-delay: 0s; }
+    .card:nth-child(2) { background: var(--sky); animation-delay: -.22s; }
+    .card:nth-child(3) { background: var(--lavender); animation-delay: -.44s; }
+    .card:nth-child(4) { background: var(--cream); animation-delay: -.66s; }
+    .card:nth-child(5) { background: var(--pink); animation-delay: -.88s; }
+    @keyframes shuffle {
+      0% { transform: translate(-72px, 10px) rotate(-14deg) scale(.9); z-index: 1; }
+      24% { transform: translate(70px, -18px) rotate(12deg) scale(1); z-index: 3; }
+      48% { transform: translate(20px, 28px) rotate(5deg) scale(.94); z-index: 2; }
+      72% { transform: translate(-34px, -28px) rotate(-8deg) scale(1.04); z-index: 4; }
+      100% { transform: translate(-72px, 10px) rotate(-14deg) scale(.9); z-index: 1; }
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 14px 28px rgba(70,91,112,.1);
+      color: #5d6873;
+      font-weight: 950;
+    }
+    .dots::after { content: ""; animation: dots 1s steps(4, end) infinite; }
+    @keyframes dots {
+      0% { content: ""; }
+      25% { content: "."; }
+      50% { content: ".."; }
+      75%, 100% { content: "..."; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <h1 id="title">청소분담 생성 중</h1>
+    <p class="date" id="dateText"></p>
+    <div class="machine" aria-hidden="true">
+      <div class="card">👟</div>
+      <div class="card">🧼</div>
+      <div class="card">🚿</div>
+      <div class="card">🚽</div>
+      <div class="card">🧹</div>
+    </div>
+    <div class="status">공정 랜덤으로 청소 역할을 섞는 중<span class="dots"></span></div>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const room = normalizeRoom(params.get("room")) || "404";
+    const date = params.get("date") || todayLocal();
+    const seat = params.get("seat") || "1-1";
+    const excludeSeats = params.get("excludeSeats") || "";
+    const excludeRoles = params.get("excludeRoles") || "";
+    const memberCount = params.get("memberCount") || "16";
+
+    function normalizeRoom(value) {
+      return String(value || "").replace(/호/g, "").trim();
+    }
+    function todayLocal() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    }
+    function displayDate(value) {
+      return value.replace(/-/g, ".");
+    }
+
+    document.getElementById("title").textContent = `${room}호 청소분담 생성 중`;
+    document.getElementById("dateText").textContent = `${displayDate(date)} 청소점검 기준`;
+
+    window.setTimeout(() => {
+      const query = new URLSearchParams({ room, date, seat });
+      if (excludeSeats) query.set("excludeSeats", excludeSeats);
+      if (excludeRoles) query.set("excludeRoles", excludeRoles);
+      if (memberCount) query.set("memberCount", memberCount);
+      location.href = `01-index.html?${query.toString()}`;
+    }, 1850);
+  </script>
+</body>
+</html>
