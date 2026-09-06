@@ -397,6 +397,62 @@
       background: var(--pink-soft);
       border: 1px solid #f9d4ea;
     }
+    .finish-block {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 22px;
+      background: #fff;
+      border: 2px solid var(--blue-soft);
+      box-shadow: 0 10px 24px rgba(0,78,162,.08);
+    }
+    .finish-title {
+      margin: 0 0 12px;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+    .finish-step {
+      padding: 14px;
+      border-radius: 16px;
+      background: #f7f8fa;
+    }
+    .finish-step + .finish-step { margin-top: 10px; }
+    .finish-step.sign-focus {
+      background: var(--pink-soft);
+      border: 1px solid #f9d4ea;
+    }
+    .finish-step strong {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #394852;
+    }
+    .finish-step .step-num {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+    .finish-step.sign-focus .step-num { background: var(--pink); }
+    .finish-step p { margin: 0; color: #394852; line-height: 1.48; font-weight: 800; }
+    .finish-step small {
+      display: block;
+      margin-top: 6px;
+      color: #66727e;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+    .finish-step .quote { color: var(--pink); font-weight: 800; }
+    .finish-step .checks { margin: 0; }
     .detail-block strong { display: block; margin-bottom: 6px; font-size: 13px; color: #66727f; }
     .detail-block p { margin: 0; color: #394852; line-height: 1.48; font-weight: 800; }
     .detail-block small {
@@ -528,21 +584,94 @@
       text-align: center;
     }
     .celebrate-mascot {
-      width: min(48vw, 190px);
-      height: min(48vw, 190px);
+      width: min(56vw, 220px);
+      height: min(56vw, 220px);
       object-fit: contain;
-      filter: drop-shadow(0 14px 24px rgba(0, 0, 0, .28));
-      z-index: 2;
-      animation: celPop .6s cubic-bezier(.2, 1.5, .4, 1) both, celWiggle 1.1s ease-in-out .6s infinite;
+      filter: drop-shadow(0 16px 28px rgba(0, 0, 0, .3));
+      z-index: 3;
+      animation: celPop .7s cubic-bezier(.18, 1.7, .35, 1) both, celWiggle 1s ease-in-out .7s infinite;
     }
     @keyframes celPop {
-      0% { transform: scale(.2) rotate(-14deg); opacity: 0; }
-      60% { transform: scale(1.14) rotate(6deg); opacity: 1; }
+      0% { transform: scale(.1) rotate(-18deg); opacity: 0; }
+      45% { transform: scale(1.25) rotate(8deg); opacity: 1; }
+      70% { transform: scale(.94) rotate(-4deg); }
       100% { transform: scale(1) rotate(0); }
     }
     @keyframes celWiggle {
-      0%, 100% { rotate: -4deg; }
-      50% { rotate: 4deg; }
+      0%, 100% { rotate: -5deg; }
+      50% { rotate: 5deg; }
+    }
+    .cel-glow {
+      position: absolute;
+      left: 50%;
+      top: 46%;
+      width: 300px;
+      height: 300px;
+      margin: -150px 0 0 -150px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(253,190,37,.55), rgba(243,49,165,.22) 45%, transparent 68%);
+      z-index: 1;
+      opacity: 0;
+      animation: celGlow 1.6s ease-out both;
+    }
+    @keyframes celGlow {
+      0% { opacity: 0; transform: scale(.5); }
+      30% { opacity: 1; transform: scale(1.05); }
+      100% { opacity: .5; transform: scale(1); }
+    }
+    .cel-ring {
+      position: absolute;
+      left: 50%;
+      top: 46%;
+      width: 120px;
+      height: 120px;
+      margin: -60px 0 0 -60px;
+      border-radius: 50%;
+      border: 6px solid rgba(253,190,37,.85);
+      z-index: 1;
+      transform: scale(.2);
+      opacity: 0;
+      animation: celRing .8s ease-out .05s forwards;
+    }
+    .cel-ring2 {
+      border-color: rgba(243,49,165,.8);
+      border-width: 4px;
+      animation-delay: .18s;
+    }
+    @keyframes celRing {
+      0% { transform: scale(.2); opacity: .95; }
+      100% { transform: scale(2.8); opacity: 0; }
+    }
+    .confetti {
+      position: absolute;
+      left: 50%;
+      top: 40%;
+      width: 10px;
+      height: 14px;
+      border-radius: 2px;
+      z-index: 2;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      animation: confFall 1.5s ease-in forwards;
+    }
+    @keyframes confFall {
+      0% { opacity: 0; transform: translate(-50%, -50%) translate(0, 0) rotate(0deg); }
+      12% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--cx), var(--cy)) rotate(var(--cr)); }
+    }
+    .heart {
+      position: absolute;
+      left: 50%;
+      top: 44%;
+      z-index: 2;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      animation: heartFloat 1.6s ease-out forwards;
+    }
+    @keyframes heartFloat {
+      0% { opacity: 0; transform: translate(-50%, -50%) translate(0, 0) scale(.4); }
+      25% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--hx), -130px) scale(1.1); }
     }
     .celebrate-text {
       z-index: 2;
@@ -803,14 +932,17 @@
         <strong>주의사항</strong>
         <p id="modalCaution"></p>
       </div>
-      <div class="detail-block sign-focus">
-        <strong>싸인 위치</strong>
-        <p id="modalSign"></p>
-        <button class="small-action" id="modalSignGuide" type="button">확인표 보기</button>
-      </div>
-      <div class="detail-block">
-        <strong>체크리스트</strong>
-        <div class="checks" id="modalChecks"></div>
+      <div class="finish-block">
+        <p class="finish-title">청소 완료 절차</p>
+        <div class="finish-step">
+          <strong><span class="step-num">1</span>체크리스트 확인</strong>
+          <div class="checks" id="modalChecks"></div>
+        </div>
+        <div class="finish-step sign-focus">
+          <strong><span class="step-num">2</span>싸인 위치</strong>
+          <p id="modalSign"></p>
+          <button class="small-action" id="modalSignGuide" type="button">확인표 보기</button>
+        </div>
       </div>
     </div>
   </div>
@@ -829,6 +961,9 @@
 
   <div class="celebrate" id="celebrate" aria-hidden="true">
     <div class="celebrate-inner">
+      <div class="cel-glow"></div>
+      <div class="cel-ring"></div>
+      <div class="cel-ring cel-ring2"></div>
       <div class="spark-field" id="sparkField"></div>
       <img class="celebrate-mascot" src="./images/mascot-cheer.png" alt="">
       <div class="celebrate-text">청소 완료! 수고했어요 🎉</div>
@@ -1430,30 +1565,67 @@
       }
       return `PA 청소확인표의 “${escapeHtml(role.signRow)}” 칸에 이름 또는 싸인을 남겨주세요.`;
     }
-    // 완료 축하 연출: 마스코트가 펑! 튀어나오고 반짝이 별이 사방으로 터짐
+    // 완료 축하 연출: 마스코트 펑! + 반짝이 별 + 색종이(컨페티) + 하트 + 확산 링
     let celebrateTimer = null;
+    function restartAnim(el) {
+      if (!el) return;
+      el.style.animation = "none";
+      void el.offsetWidth; // 리플로우로 애니메이션 재시작
+      el.style.animation = "";
+    }
     function celebrate() {
       const el = document.getElementById("celebrate");
       const field = document.getElementById("sparkField");
       field.innerHTML = "";
-      const colors = ["#FDBE25", "#F331A5", "#004EA2"];
-      const count = 16;
-      for (let i = 0; i < count; i += 1) {
+      const sparkColors = ["#FDBE25", "#F331A5", "#004EA2"];
+      const confColors = ["#FDBE25", "#F331A5", "#004EA2", "#ff6dbd", "#2f74c9", "#7fd98a"];
+      const hearts = ["💛", "💗", "🧡"];
+      // 반짝이 별
+      const sparkN = 18;
+      for (let i = 0; i < sparkN; i += 1) {
         const s = document.createElement("span");
         s.className = "spark";
         s.textContent = "✦";
-        const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
-        const dist = 95 + Math.random() * 80;
+        const angle = (Math.PI * 2 * i) / sparkN + Math.random() * 0.5;
+        const dist = 100 + Math.random() * 90;
         s.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
         s.style.setProperty("--dy", `${Math.sin(angle) * dist}px`);
-        s.style.color = colors[i % colors.length];
+        s.style.color = sparkColors[i % sparkColors.length];
         s.style.fontSize = `${18 + Math.random() * 18}px`;
-        s.style.animationDelay = `${Math.random() * 0.18}s`;
+        s.style.animationDelay = `${Math.random() * 0.2}s`;
         field.appendChild(s);
       }
+      // 색종이(컨페티)
+      const confN = 26;
+      for (let i = 0; i < confN; i += 1) {
+        const c = document.createElement("span");
+        c.className = "confetti";
+        c.style.setProperty("--cx", `${(Math.random() - 0.5) * 300}px`);
+        c.style.setProperty("--cy", `${120 + Math.random() * 170}px`);
+        c.style.setProperty("--cr", `${Math.random() * 720 - 360}deg`);
+        c.style.background = confColors[i % confColors.length];
+        c.style.animationDelay = `${Math.random() * 0.25}s`;
+        if (Math.random() > 0.5) c.style.borderRadius = "50%";
+        field.appendChild(c);
+      }
+      // 하트
+      for (let i = 0; i < 5; i += 1) {
+        const h = document.createElement("span");
+        h.className = "heart";
+        h.textContent = hearts[i % hearts.length];
+        h.style.setProperty("--hx", `${(Math.random() - 0.5) * 170}px`);
+        h.style.fontSize = `${20 + Math.random() * 12}px`;
+        h.style.animationDelay = `${0.1 + Math.random() * 0.4}s`;
+        field.appendChild(h);
+      }
+      restartAnim(document.querySelector(".cel-glow"));
+      restartAnim(document.querySelector(".cel-ring"));
+      restartAnim(document.querySelector(".cel-ring2"));
+      restartAnim(document.querySelector(".celebrate-mascot"));
+      restartAnim(document.querySelector(".celebrate-text"));
       el.classList.add("show");
       window.clearTimeout(celebrateTimer);
-      celebrateTimer = window.setTimeout(hideCelebrate, 1800);
+      celebrateTimer = window.setTimeout(hideCelebrate, 2200);
     }
     function hideCelebrate() {
       window.clearTimeout(celebrateTimer);
