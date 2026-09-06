@@ -418,17 +418,18 @@
       place-items: center;
     }
     .complete-pop {
-      width: 72px;
-      height: 72px;
-      margin: 0 auto 12px;
-      border-radius: 24px;
+      width: 104px;
+      height: 104px;
+      margin: 0 auto 10px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, var(--blue), var(--pink) 140%);
-      color: #fff;
-      font-size: 34px;
-      box-shadow: 0 12px 24px rgba(0,78,162,.26);
       animation: pop .5s ease-out both;
+    }
+    .complete-pop img {
+      width: 104px;
+      height: 104px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 14px rgba(17,31,60,.14));
     }
     @keyframes pop {
       0% { transform: scale(.65); opacity: 0; }
@@ -741,7 +742,7 @@
 
   <div class="modal" id="signModal" role="dialog" aria-modal="true" aria-labelledby="signTitle">
     <div class="sheet sign-sheet">
-      <div class="complete-pop" aria-hidden="true">✓</div>
+      <div class="complete-pop" aria-hidden="true"><img src="./images/mascot-wipe.png" alt=""></div>
       <h2 id="signTitle">청소 완료</h2>
       <div class="sign-image" id="signImage"></div>
       <div class="sign-message" id="signMessage"></div>

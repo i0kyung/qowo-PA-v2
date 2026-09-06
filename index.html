@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>청소분담실</title>
+  <link rel="preload" as="image" href="./images/mascot-sweep.png">
+  <link rel="preload" as="image" href="./images/mascot-wipe.png">
+  <link rel="preload" as="image" href="./images/mascot-mop.png">
+  <link rel="preload" as="image" href="./images/mascot-trash.png">
   <style>
     :root {
       --blue: #004EA2;
@@ -44,16 +48,24 @@
     }
     .hero { text-align: center; padding: 6px 6px 0; }
     .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 72px;
-      height: 72px;
-      margin-bottom: 18px;
-      border-radius: 24px;
-      background: linear-gradient(135deg, var(--blue), var(--pink) 135%);
-      box-shadow: 0 12px 24px rgba(0, 78, 162, .28);
-      font-size: 36px;
+      display: inline-grid;
+      place-items: center;
+      width: 112px;
+      height: 112px;
+      margin-bottom: 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, rgba(253,190,37,.32), rgba(243,49,165,.12) 68%, #eef1f4 70%);
+      animation: float 2.6s ease-in-out infinite;
+    }
+    .badge img {
+      width: 94px;
+      height: 94px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 12px rgba(17,31,60,.12));
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
     }
     h1 { margin: 0; font-size: 30px; line-height: 1.25; font-weight: 800; letter-spacing: -0.6px; }
     .intro {
@@ -393,7 +405,7 @@
 <body>
   <main class="app">
     <section class="hero">
-      <div class="badge" aria-hidden="true">🧹</div>
+      <div class="badge" aria-hidden="true"><img src="./images/mascot-sweep.png" alt=""></div>
       <h1 id="heroTitle">PA 랜덤청소분담</h1>
       <p class="intro" id="heroIntro">호실과 날짜를 입력하면<br>16개 청소 역할이 자동으로 배정됩니다.</p>
     </section>
