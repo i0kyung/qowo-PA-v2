@@ -774,15 +774,16 @@
       toilet4: "./images/map-toilet4.png",
       trashAll: "./images/map-trash.png",
       livingSweep: "./images/map-living.png",
-      livingWipe: "./images/map-living.png",
+      livingWipe1: "./images/map-living-2.png",
+      livingWipe2: "./images/map-living-3.png",
       verandaSweep: "./images/map-veranda.png",
       verandaWipe: "./images/map-veranda.png"
     };
     // 역할별 전용 탑뷰 약도(브랜드 색 강조) - 16역할 전체 연결 완료:
-    // - map-entrance(신발장 앞) / map-sink(세면대) / map-shower1~3(샤워실)
-    // - map-toilet1~4(변기·바닥) / map-trash(휴지통 전체) / map-living(거실 전체)
-    // - map-veranda(베란다) / sign-guide.jpg(싸인 안내 모달)
-    // - 미사용 여분: "3.화장실 앞"(파랑), "4.샤워실 앞"(노랑) 공용바닥 약도
+    // - map-entrance(현관·신발장) / map-sink(세면대) / map-shower1~3(샤워실)
+    // - map-toilet1~4(변기·바닥) / map-trash(휴지통 전체) / map-veranda(베란다)
+    // - 거실 3명은 3구역 분담: map-living(거실 전체=쓸기), map-living-2(신발장 앞=닦기1), map-living-3(화장실 앞=닦기2)
+    // - sign-guide.jpg(싸인 안내 모달) / 미사용 여분: "4.샤워실 앞"(노랑)
 
     const completeMessages = [
       "청소 완료! 아래 싸인 위치를 확인해주세요.",
@@ -805,9 +806,9 @@
       { id: 9, name: "변기·바닥 3", summary: "변기 닦기 및 바닥 닦기", caution: "변기 주변과 바닥 물기를 확인해주세요.", signRow: "변기 닦기 및 바닥 닦기", signGuideText: "PA 청소확인표의 “변기 닦기 및 바닥 닦기” 칸에 싸인해주세요.", color: "toilet", previewType: "icon-card", previewIcon: "🚽", previewBg: "#dceeff", detailImage: imageAssets.toilet3, location: "화장실 3", checks: ["변기 닦기 완료", "바닥 닦기 완료"] },
       { id: 10, name: "변기·바닥 4", summary: "변기 닦기 및 바닥 닦기", caution: "변기 주변과 바닥 물기를 확인해주세요.", signRow: "변기 닦기 및 바닥 닦기", signGuideText: "PA 청소확인표의 “변기 닦기 및 바닥 닦기” 칸에 싸인해주세요.", color: "toilet", previewType: "icon-card", previewIcon: "🚽", previewBg: "#dceeff", detailImage: imageAssets.toilet4, location: "화장실 4", checks: ["변기 닦기 완료", "바닥 닦기 완료"] },
       { id: 11, name: "휴지통 비우기", summary: "생활관 전체 휴지통 비우기", caution: "화장실과 세면대 주변 휴지통을 모두 비우고 뒤집어주세요. 냉장고 온도는 ‘중’인지 확인하고, 냉장고 주변 쓰레기만 확인해주세요. 개인 음식물은 건드리지 않습니다.", signRow: "생활관 전체 휴지통 비우기", signGuideText: "PA 청소확인표의 “생활관 전체 휴지통 비우기” 칸에 싸인해주세요.", color: "trash", previewType: "icon-card", previewIcon: "🗑️", previewBg: "#ded5ff", detailImage: imageAssets.trashAll, location: "생활관 전체 휴지통", checks: ["생활관 전체 휴지통 비우기 완료", "휴지통 뒤집기 및 냉장고 온도 ‘중’ 확인"] },
-      { id: 12, name: "거실 쓸기", summary: "거실 바닥 쓸기", caution: "거실 전체 바닥의 먼지와 머리카락을 빗자루로 쓸어 모아주세요. 구석과 가장자리까지 확인해주세요.", signRow: "거실 쓸기", signGuideText: "PA 청소확인표의 “거실 쓸기” 칸에 싸인해주세요.", color: "living", previewType: "icon-card", previewIcon: "🧹", previewBg: "#dff2bf", detailImage: imageAssets.livingSweep, location: "거실", checks: ["거실 전체 바닥 쓸기 완료", "구석·가장자리 먼지 제거 확인"] },
-      { id: 13, name: "거실 닦기 1", summary: "거실 바닥 닦기", caution: "거실 전체 바닥을 물걸레로 닦아주세요. 쓸기 담당자가 쓴 뒤에 닦아주세요.", signRow: "거실 닦기", signGuideText: "PA 청소확인표의 “거실 닦기” 칸에 싸인해주세요.", color: "living", previewType: "icon-card", previewIcon: "🧽", previewBg: "#dff2bf", detailImage: imageAssets.livingWipe, location: "거실", checks: ["거실 전체 바닥 닦기 완료"] },
-      { id: 14, name: "거실 닦기 2", summary: "거실 바닥 닦기", caution: "거실 전체 바닥을 물걸레로 닦아주세요. 쓸기 담당자가 쓴 뒤에 닦아주세요.", signRow: "거실 닦기", signGuideText: "PA 청소확인표의 “거실 닦기” 칸에 싸인해주세요.", color: "living", previewType: "icon-card", previewIcon: "🧽", previewBg: "#dff2bf", detailImage: imageAssets.livingWipe, location: "거실", checks: ["거실 전체 바닥 닦기 완료"] },
+      { id: 12, name: "거실 쓸기", summary: "거실 전체 바닥 쓸기", caution: "거실 청소 3명 중 ① 첫 순서입니다. 거실 전체 바닥의 먼지와 머리카락을 빗자루로 쓸어 모아주세요. 쓸기가 끝나야 닦기 담당자가 진행할 수 있습니다.", signRow: "거실 쓸기", signGuideText: "PA 청소확인표의 “거실 쓸기” 칸에 싸인해주세요.", color: "living", previewType: "icon-card", previewIcon: "🧹", previewBg: "#dff2bf", detailImage: imageAssets.livingSweep, location: "거실 전체", checks: ["거실 전체 바닥 쓸기 완료", "구석·가장자리 먼지 제거 확인"] },
+      { id: 13, name: "거실 닦기 1", summary: "신발장 앞 바닥 닦기", caution: "거실 청소 3명 중 ② 순서입니다. 거실 쓸기가 끝나면, 신발장 앞 공용 바닥을 물걸레로 닦아주세요.", signRow: "거실 닦기", signGuideText: "PA 청소확인표의 “거실 닦기” 칸에 싸인해주세요.", color: "living", previewType: "icon-card", previewIcon: "🧽", previewBg: "#dff2bf", detailImage: imageAssets.livingWipe1, location: "신발장 앞", checks: ["신발장 앞 바닥 닦기 완료"] },
+      { id: 14, name: "거실 닦기 2", summary: "화장실 앞 바닥 닦기", caution: "거실 청소 3명 중 ③ 순서입니다. 앞 담당자가 끝나면, 화장실 앞 공용 바닥을 물걸레로 닦아주세요.", signRow: "거실 닦기", signGuideText: "PA 청소확인표의 “거실 닦기” 칸에 싸인해주세요.", color: "living", previewType: "icon-card", previewIcon: "🧽", previewBg: "#dff2bf", detailImage: imageAssets.livingWipe2, location: "화장실 앞", checks: ["화장실 앞 바닥 닦기 완료"] },
       { id: 15, name: "베란다 쓸기", summary: "베란다 바닥 쓸기", caution: "베란다 전체 바닥의 먼지와 이물질을 빗자루로 쓸어 모아주세요.", signRow: "베란다 쓸기", signGuideText: "PA 청소확인표의 “베란다 쓸기” 칸에 싸인해주세요.", color: "veranda", previewType: "icon-card", previewIcon: "🍃", previewBg: "#e1f3d8", detailImage: imageAssets.verandaSweep, location: "베란다", checks: ["베란다 전체 바닥 쓸기 완료"] },
       { id: 16, name: "베란다 닦기", summary: "베란다 바닥 닦기", caution: "베란다 전체 바닥을 물걸레로 닦아주세요. 쓸기 담당자가 쓴 뒤에 닦아주세요.", signRow: "베란다 닦기", signGuideText: "PA 청소확인표의 “베란다 닦기” 칸에 싸인해주세요.", color: "veranda", previewType: "icon-card", previewIcon: "🌿", previewBg: "#e1f3d8", detailImage: imageAssets.verandaWipe, location: "베란다", checks: ["베란다 전체 바닥 닦기 완료"] }
     ];
