@@ -755,28 +755,27 @@
     const imageAssets = {
       mapAll: "./images/map-all.png",
       signGuide: "./images/sign-guide.jpg",
-      entrance: "./images/map-all.png",
-      sinkStain: "./images/세면대 1.png",
-      sinkMirror: "./images/세면대 거울.png",
-      shower1: "./images/샤워실 1.png",
-      shower2: "./images/샤워실 2.png",
-      shower3: "./images/샤워실 3.png",
-      toilet1: "./images/화장실 1.png",
-      toilet2: "./images/화장실 2.png",
-      toilet3: "./images/화장실 3.png",
-      toilet4: "./images/화장실 4.png",
-      trashAll: "./images/휴지통 전체.png",
+      entrance: "./images/map-entrance.png",
+      sinkStain: "./images/map-sink.png",
+      sinkMirror: "./images/map-sink.png",
+      shower1: "./images/map-shower1.png",
+      shower2: "./images/map-shower2.png",
+      shower3: "./images/map-shower3.png",
+      toilet1: "./images/map-toilet1.png",
+      toilet2: "./images/map-toilet2.png",
+      toilet3: "./images/map-toilet3.png",
+      toilet4: "./images/map-toilet4.png",
+      trashAll: "./images/map-trash.png",
       livingSweep: "./images/map-living.png",
       livingWipe: "./images/map-living.png",
-      verandaSweep: "./images/map-all.png",
-      verandaWipe: "./images/map-all.png"
+      verandaSweep: "./images/map-veranda.png",
+      verandaWipe: "./images/map-veranda.png"
     };
-    // 이미지 점검 (뼈대 단계 - 디자인/전용 이미지는 추후 교체 예정):
-    // - map-all.png : 현관 / 베란다 쓸기·닦기 임시 이미지
-    // - sign-guide.jpg : 싸인 안내 모달, 확인표 보기 모달
-    // - 세면대 1.png : 세면대 얼룩·물기 제거 임시 이미지
-    // - map-living.png : 거실 쓸기/닦기(3명) 전용 약도(거실 전체 초록)
-    // - TODO: 샤워실, 세면대거울, 변기·바닥, 휴지통, 현관, 베란다 전용 약도 교체
+    // 역할별 전용 탑뷰 약도(브랜드 색 강조) - 16역할 전체 연결 완료:
+    // - map-entrance(신발장 앞) / map-sink(세면대) / map-shower1~3(샤워실)
+    // - map-toilet1~4(변기·바닥) / map-trash(휴지통 전체) / map-living(거실 전체)
+    // - map-veranda(베란다) / sign-guide.jpg(싸인 안내 모달)
+    // - 미사용 여분: "3.화장실 앞"(파랑), "4.샤워실 앞"(노랑) 공용바닥 약도
 
     const completeMessages = [
       "청소 완료! 아래 싸인 위치를 확인해주세요.",
