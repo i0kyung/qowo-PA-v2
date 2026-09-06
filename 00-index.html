@@ -64,20 +64,19 @@
     }
     @keyframes bob {
       0%, 100% { transform: translateY(0) rotate(-2deg); }
-      50% { transform: translateY(-12px) rotate(2deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
     }
-    .mascot {
+    .frame {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: contain;
       opacity: 0;
-      transform: scale(.9);
-      transition: opacity .35s ease, transform .35s ease;
+      transition: opacity .16s ease;
       filter: drop-shadow(0 12px 18px rgba(17,31,60,.14));
     }
-    .mascot.active { opacity: 1; transform: scale(1); }
+    .frame.on { opacity: 1; }
     .status {
       display: inline-flex;
       align-items: center;
@@ -107,10 +106,8 @@
     <div class="mascot-wrap" aria-hidden="true">
       <div class="blob"></div>
       <div class="mascot-stage">
-        <img class="mascot active" src="./images/mascot-sweep.png" alt="">
-        <img class="mascot" src="./images/mascot-wipe.png" alt="">
-        <img class="mascot" src="./images/mascot-mop.png" alt="">
-        <img class="mascot" src="./images/mascot-trash.png" alt="">
+        <img class="frame" id="frameA" alt="">
+        <img class="frame" id="frameB" alt="">
       </div>
     </div>
     <div class="status">공정 랜덤으로 청소 역할을 섞는 중<span class="dots"></span></div>
@@ -138,14 +135,26 @@
     document.getElementById("title").textContent = `${room}호 청소분담 생성 중`;
     document.getElementById("dateText").textContent = `${displayDate(date)} 청소점검 기준`;
 
-    // 청소나섬 마스코트가 4가지 청소 동작을 번갈아 보여주며 역할을 섞습니다.
-    const mascots = document.querySelectorAll(".mascot");
-    let mIndex = 0;
+    // 청소나섬 로딩 모션: 4가지 청소 타입 중 하나를 랜덤으로 뽑아
+    // 그 타입의 '전' 프레임 ↔ '후' 프레임을 왔다갔다 반복(청소하는 동작).
+    const types = [
+      ["./images/mascot-sweep.png",  "./images/mascot-mop.png"],    // 바닥: 쓸기 ↔ 대걸레
+      ["./images/mascot-pickup.png", "./images/mascot-bin.png"],    // 쓰레기: 줍기 ↔ 버리기
+      ["./images/mascot-wipe.png",   "./images/mascot-spray.png"],  // 책상: 행주 ↔ 스프레이
+      ["./images/mascot-window.png", "./images/mascot-happy.png"]   // 유리: 창문 ↔ 신나게
+    ];
+    const pick = types[Math.floor(Math.random() * types.length)];
+    const fA = document.getElementById("frameA");
+    const fB = document.getElementById("frameB");
+    fA.src = pick[0];
+    fB.src = pick[1];
+    fA.classList.add("on");
+    let showA = true;
     window.setInterval(() => {
-      mascots[mIndex].classList.remove("active");
-      mIndex = (mIndex + 1) % mascots.length;
-      mascots[mIndex].classList.add("active");
-    }, 620);
+      showA = !showA;
+      fA.classList.toggle("on", showA);
+      fB.classList.toggle("on", !showA);
+    }, 480);
 
     window.setTimeout(() => {
       const query = new URLSearchParams({ room, date, seat });
