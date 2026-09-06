@@ -507,6 +507,75 @@
       white-space: nowrap;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .celebrate {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(23, 31, 40, .52);
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+    }
+    .celebrate.show { display: flex; animation: celBg .3s ease-out; }
+    @keyframes celBg { from { opacity: 0; } to { opacity: 1; } }
+    .celebrate-inner {
+      position: relative;
+      display: grid;
+      place-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+    .celebrate-mascot {
+      width: min(48vw, 190px);
+      height: min(48vw, 190px);
+      object-fit: contain;
+      filter: drop-shadow(0 14px 24px rgba(0, 0, 0, .28));
+      z-index: 2;
+      animation: celPop .6s cubic-bezier(.2, 1.5, .4, 1) both, celWiggle 1.1s ease-in-out .6s infinite;
+    }
+    @keyframes celPop {
+      0% { transform: scale(.2) rotate(-14deg); opacity: 0; }
+      60% { transform: scale(1.14) rotate(6deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0); }
+    }
+    @keyframes celWiggle {
+      0%, 100% { rotate: -4deg; }
+      50% { rotate: 4deg; }
+    }
+    .celebrate-text {
+      z-index: 2;
+      color: #fff;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, .35);
+      animation: celFade .5s ease-out .28s both;
+    }
+    @keyframes celFade {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .spark-field {
+      position: absolute;
+      inset: -60px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .spark {
+      position: absolute;
+      left: 50%;
+      top: 46%;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      animation: sparkBurst .95s ease-out forwards;
+    }
+    @keyframes sparkBurst {
+      0% { transform: translate(-50%, -50%) translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
+      25% { opacity: 1; }
+      100% { transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(1) rotate(160deg); opacity: 0; }
+    }
     .shoe { background: #ffd5ce; }
     .front { background: #fff1ad; }
     .living { background: #dff2bf; }
@@ -758,6 +827,14 @@
   </div>
   <div class="toast" id="toast"></div>
 
+  <div class="celebrate" id="celebrate" aria-hidden="true">
+    <div class="celebrate-inner">
+      <div class="spark-field" id="sparkField"></div>
+      <img class="celebrate-mascot" src="./images/mascot-cheer.png" alt="">
+      <div class="celebrate-text">청소 완료! 수고했어요 🎉</div>
+    </div>
+  </div>
+
   <script>
     const imageAssets = {
       mapAll: "./images/map-all.png",
@@ -855,7 +932,12 @@
     document.getElementById("detailModal").addEventListener("click", (event) => {
       if (event.target.id === "detailModal") closeDetailModal();
     });
-    document.getElementById("signOk").addEventListener("click", closeSignModal);
+    document.getElementById("signOk").addEventListener("click", () => {
+      const isComplete = document.getElementById("signTitle").textContent === "청소 완료";
+      closeSignModal();
+      if (isComplete) celebrate();
+    });
+    document.getElementById("celebrate").addEventListener("click", hideCelebrate);
     document.getElementById("signGuideButton").addEventListener("click", () => openSignGuideModal(activeSignRole));
     document.getElementById("signModal").addEventListener("click", (event) => {
       if (event.target.id === "signModal") closeSignModal();
@@ -1291,6 +1373,7 @@
       document.getElementById("signTitle").textContent = "청소 완료";
       document.getElementById("signMessage").innerHTML = completionMessageHtml(activeSignRole, completeMessages[rand]);
       document.getElementById("signImage").innerHTML = imageHtml(imageAssets.signGuide, "청소 확인표 싸인 안내 이미지");
+      document.getElementById("signOk").textContent = "완료했어요";
       document.getElementById("signModal").classList.add("open");
     }
     function openSignGuideModal(roleOrMessage = activeSignRole) {
@@ -1300,6 +1383,7 @@
       document.getElementById("signTitle").textContent = "PA 확인표 보기";
       document.getElementById("signMessage").innerHTML = message;
       document.getElementById("signImage").innerHTML = imageHtml(imageAssets.signGuide, "PA 청소확인표 싸인 위치 안내 이미지");
+      document.getElementById("signOk").textContent = "확인했어요";
       document.getElementById("signModal").classList.add("open");
     }
     function completionMessageHtml(role, leadText) {
@@ -1345,6 +1429,35 @@
         return `청소 완료 후 PA 청소확인표의<br><span class="quote">“${escapeHtml(role.signRow)}”</span><br>칸에 싸인해주세요.${role.signNote ? `<br><small>${escapeHtml(role.signNote)}</small>` : ""}`;
       }
       return `PA 청소확인표의 “${escapeHtml(role.signRow)}” 칸에 이름 또는 싸인을 남겨주세요.`;
+    }
+    // 완료 축하 연출: 마스코트가 펑! 튀어나오고 반짝이 별이 사방으로 터짐
+    let celebrateTimer = null;
+    function celebrate() {
+      const el = document.getElementById("celebrate");
+      const field = document.getElementById("sparkField");
+      field.innerHTML = "";
+      const colors = ["#FDBE25", "#F331A5", "#004EA2"];
+      const count = 16;
+      for (let i = 0; i < count; i += 1) {
+        const s = document.createElement("span");
+        s.className = "spark";
+        s.textContent = "✦";
+        const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+        const dist = 95 + Math.random() * 80;
+        s.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
+        s.style.setProperty("--dy", `${Math.sin(angle) * dist}px`);
+        s.style.color = colors[i % colors.length];
+        s.style.fontSize = `${18 + Math.random() * 18}px`;
+        s.style.animationDelay = `${Math.random() * 0.18}s`;
+        field.appendChild(s);
+      }
+      el.classList.add("show");
+      window.clearTimeout(celebrateTimer);
+      celebrateTimer = window.setTimeout(hideCelebrate, 1800);
+    }
+    function hideCelebrate() {
+      window.clearTimeout(celebrateTimer);
+      document.getElementById("celebrate").classList.remove("show");
     }
     function closeSignModal() {
       document.getElementById("signModal").classList.remove("open");
