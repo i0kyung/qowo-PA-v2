@@ -863,12 +863,6 @@
     <section>
       <h2 class="section-title">내 청소분담</h2>
       <article class="mine" id="mineCard"></article>
-      <div class="notice-card">
-        <strong>청소 후 확인</strong>
-      <p>청소를 마치면 실제 PA 청소확인표에서 내 역할의 싸인칸에 이름 또는 싸인을 남겨주세요.</p>
-        <p>자세히보기에서 싸인 위치를 확인할 수 있습니다.</p>
-        <button class="small-action" id="openSignGuide" type="button">확인표 보기</button>
-      </div>
     </section>
 
     <section>
@@ -1053,7 +1047,6 @@
 
     document.getElementById("copyLink").addEventListener("click", copyCurrentLink);
     document.getElementById("printPdf").addEventListener("click", exportPDF);
-    document.getElementById("openSignGuide").addEventListener("click", () => openSignGuideModal(activeSignRole));
     document.getElementById("showAllSigns").addEventListener("click", () => {
       showUnsignedOnly = false;
       renderGrid();
@@ -1323,10 +1316,6 @@
           <div>
             <h2>${escapeHtml(role.name)}</h2>
             <p class="summary">${escapeHtml(role.summary)}</p>
-            <p class="owner">담당: ${escapeHtml(mine.seat)}</p>
-            <p class="print-sign">싸인 위치: PA 확인표의 "${escapeHtml(role.signRow)}" 칸을 확인해주세요.</p>
-            <div class="checks">${role.checks.map((text, index) => checkHtml(role, mine.seat, text, index)).join("")}</div>
-            ${signControlHtml(role, mine.seat)}
             <button class="detail-link" type="button" data-role="${role.id}" data-seat="${mine.seat}">자세히보기</button>
           </div>
         `;
@@ -1342,9 +1331,6 @@
                 </div>
                 <h3>${escapeHtml(role.name)}</h3>
                 <p>${escapeHtml(role.summary)}</p>
-                <p class="print-sign">싸인 위치: ${escapeHtml(role.signRow)}</p>
-                <div class="checks">${role.checks.map((text, index) => checkHtml(role, mine.seat, text, index)).join("")}</div>
-                ${signControlHtml(role, mine.seat)}
                 <button class="detail-link" type="button" data-role="${role.id}" data-seat="${mine.seat}">자세히보기</button>
               </article>
             `).join("")}
