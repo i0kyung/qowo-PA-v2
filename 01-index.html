@@ -6,24 +6,26 @@
   <title>청소분담 결과</title>
   <style>
     :root {
-      --ink: #263238;
-      --muted: #74808b;
-      --line: #e9edf2;
-      --mint: #c8f2e8;
-      --sky: #dcefff;
-      --lavender: #eadffc;
-      --cream: #fff4cc;
-      --pink: #ffe2ec;
-      --shadow: 0 18px 44px rgba(56, 72, 92, .11);
+      --blue: #004EA2;
+      --blue-soft: #eaf1fa;
+      --pink: #F331A5;
+      --pink-soft: #fdeaf6;
+      --yellow: #FDBE25;
+      --yellow-soft: #fff6de;
+      --ink: #191f28;
+      --muted: #8b95a1;
+      --sub: #4e5968;
+      --line: #f0f1f4;
+      --shadow: 0 12px 32px rgba(17, 31, 60, .08);
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(180deg, #fff 0%, #f8fcff 54%, #fffaf0 100%);
+      background: #f7f8fa;
       color: var(--ink);
       font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
-      letter-spacing: 0;
+      letter-spacing: -0.2px;
     }
     button, input { font: inherit; }
     button { border: 0; cursor: pointer; }
@@ -70,9 +72,10 @@
       box-shadow: 0 8px 18px rgba(56,72,92,.06);
     }
     .btn.primary {
-      background: linear-gradient(135deg, #8bded2, #bba8ef);
+      background: var(--blue);
       color: #fff;
       border-color: transparent;
+      box-shadow: 0 8px 18px rgba(0,78,162,.22);
     }
     .section-title {
       margin: 26px 2px 12px;
@@ -115,25 +118,25 @@
     .summary { margin: 8px 0 0; color: #52616d; font-size: 16px; font-weight: 800; line-height: 1.42; }
     .personal-card {
       padding: 18px 20px;
-      border-radius: 22px;
-      background: linear-gradient(135deg, #eefaf4, #fff8df);
-      border: 1px solid #e3efe6;
-      color: #4d5b66;
+      border-radius: 20px;
+      background: var(--yellow-soft);
+      border: 1px solid #fcecc0;
+      color: var(--sub);
     }
-    .personal-lead { margin: 0 0 12px; font-size: 15px; font-weight: 850; line-height: 1.5; }
-    .personal-lead strong { color: #2f4d49; }
+    .personal-lead { margin: 0 0 12px; font-size: 15px; font-weight: 700; line-height: 1.5; }
+    .personal-lead strong { color: #97730a; }
     .personal-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
     .personal-list li {
       padding: 12px 14px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.85);
-      border: 1px solid #e7edf3;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid #fcecc0;
       font-size: 15px;
-      font-weight: 850;
-      color: #43515d;
+      font-weight: 700;
+      color: var(--sub);
     }
-    .personal-note { margin: 12px 0 0; font-size: 12.5px; font-weight: 800; color: #7a8793; line-height: 1.5; }
-    .owner { margin: 10px 0 0; color: #7b8792; font-size: 14px; font-weight: 900; }
+    .personal-note { margin: 12px 0 0; font-size: 12.5px; font-weight: 600; color: var(--muted); line-height: 1.5; }
+    .owner { margin: 10px 0 0; color: var(--muted); font-size: 14px; font-weight: 700; }
     .checks { display: grid; gap: 8px; margin: 16px 0 0; }
     .check {
       display: flex;
@@ -141,38 +144,38 @@
       align-items: center;
       min-height: 42px;
       padding: 9px 12px;
-      border-radius: 15px;
-      background: #f8fafc;
-      color: #43515d;
-      font-weight: 800;
+      border-radius: 12px;
+      background: #f7f8fa;
+      color: var(--sub);
+      font-weight: 700;
     }
-    .check input { width: 18px; height: 18px; accent-color: #7fd5c9; }
+    .check input { width: 18px; height: 18px; accent-color: var(--blue); }
     .detail-link {
       margin-top: 15px;
       padding: 0;
       background: transparent;
-      color: #8a7bc6;
-      font-weight: 950;
+      color: var(--blue);
+      font-weight: 800;
       text-decoration: underline;
       text-underline-offset: 4px;
     }
     .notice-card {
       margin: 14px 0 4px;
-      padding: 15px;
-      border-radius: 22px;
-      background: linear-gradient(135deg, #eef9f6, #fff8df);
-      border: 1px solid #e5f0e9;
-      color: #4f5d68;
+      padding: 16px;
+      border-radius: 16px;
+      background: var(--blue-soft);
+      border: 1px solid #dbe7f5;
+      color: var(--sub);
       font-size: 14px;
       line-height: 1.55;
-      font-weight: 820;
+      font-weight: 600;
     }
     .notice-card strong {
       display: block;
       margin-bottom: 5px;
-      color: #2f4d49;
+      color: var(--blue);
       font-size: 15px;
-      font-weight: 950;
+      font-weight: 800;
     }
     .notice-card p { margin: 0; }
     .small-action {
@@ -192,10 +195,11 @@
       align-items: center;
       gap: 12px;
       margin: 0 0 12px;
-      padding: 14px;
-      border-radius: 22px;
-      background: linear-gradient(135deg, #f1fbf8, #f4efff);
+      padding: 16px;
+      border-radius: 16px;
+      background: #fff;
       border: 1px solid var(--line);
+      box-shadow: var(--shadow);
     }
     .sign-summary h3 { margin: 0; font-size: 16px; }
     .sign-summary p { margin: 4px 0 0; color: #66727e; font-size: 13px; font-weight: 850; }
@@ -211,9 +215,9 @@
       font-weight: 950;
     }
     .filter-btn.active {
-      background: #dff7f1;
-      border-color: #95ded3;
-      color: #12675b;
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
     }
     .grid {
       display: grid;
@@ -231,8 +235,8 @@
       gap: 10px;
       align-content: start;
     }
-    .role-card.mine-card { border-color: #bba8ef; box-shadow: 0 16px 34px rgba(132,112,176,.17); }
-    .role-card.sign-done { border-color: #b8eadc; background: rgba(250,255,253,.97); }
+    .role-card.mine-card { border-color: var(--pink); box-shadow: 0 14px 30px rgba(243,49,165,.18); }
+    .role-card.sign-done { border-color: #cfe0f2; background: #fbfdff; }
     .mini-top { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
     .seat-badge {
       min-width: 46px;
@@ -299,7 +303,7 @@
       font-size: 13px;
       font-weight: 950;
     }
-    .sign-check input { width: 17px; height: 17px; accent-color: #74d5c8; }
+    .sign-check input { width: 17px; height: 17px; accent-color: var(--blue); }
     .status-badge {
       width: max-content;
       min-height: 26px;
@@ -313,8 +317,8 @@
       font-weight: 950;
     }
     .status-badge.done {
-      background: #dff7f1;
-      color: #12675b;
+      background: var(--blue-soft);
+      color: var(--blue);
     }
     .role-card .detail-link { margin-top: 2px; justify-self: start; font-size: 13px; }
     .modal {
@@ -379,9 +383,9 @@
       width: 100%;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, #eef9f6, #f4efff);
-      color: #82909c;
-      font-weight: 950;
+      background: var(--blue-soft);
+      color: var(--muted);
+      font-weight: 800;
     }
     .detail-block {
       margin-top: 14px;
@@ -390,8 +394,8 @@
       background: #f9fbfd;
     }
     .detail-block.sign-focus {
-      background: linear-gradient(135deg, #e8faf5, #f5efff);
-      border: 1px solid #dceee9;
+      background: var(--pink-soft);
+      border: 1px solid #f9d4ea;
     }
     .detail-block strong { display: block; margin-bottom: 6px; font-size: 13px; color: #66727f; }
     .detail-block p { margin: 0; color: #394852; line-height: 1.48; font-weight: 800; }
@@ -417,11 +421,13 @@
       width: 72px;
       height: 72px;
       margin: 0 auto 12px;
-      border-radius: 26px;
+      border-radius: 24px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, #c8f2e8, #eadffc);
+      background: linear-gradient(135deg, var(--blue), var(--pink) 140%);
+      color: #fff;
       font-size: 34px;
+      box-shadow: 0 12px 24px rgba(0,78,162,.26);
       animation: pop .5s ease-out both;
     }
     @keyframes pop {
@@ -437,41 +443,42 @@
     }
     .sign-role-info {
       margin: 12px 0 0;
-      padding: 13px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #f1fbf8, #f7f2ff);
-      border: 1px solid #e4ecef;
+      padding: 14px;
+      border-radius: 14px;
+      background: var(--pink-soft);
+      border: 1px solid #f9d4ea;
       text-align: left;
-      color: #43515d;
+      color: var(--sub);
       font-size: 14px;
-      font-weight: 850;
+      font-weight: 700;
       line-height: 1.55;
     }
     .sign-role-info strong {
       display: block;
       margin: 0 0 3px;
-      color: #263238;
+      color: var(--ink);
       font-size: 13px;
-      font-weight: 950;
+      font-weight: 800;
     }
     .sign-role-info .quote {
       display: block;
       margin: 2px 0;
-      color: #6d5fbb;
-      font-weight: 950;
+      color: var(--pink);
+      font-weight: 800;
     }
     .detail-block .quote {
-      color: #6d5fbb;
-      font-weight: 950;
+      color: var(--pink);
+      font-weight: 800;
     }
     .sign-ok {
       width: 100%;
-      min-height: 50px;
+      min-height: 52px;
       margin-top: 14px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #8bded2, #bba8ef);
+      border-radius: 16px;
+      background: var(--blue);
       color: #fff;
-      font-weight: 950;
+      font-weight: 800;
+      box-shadow: 0 10px 20px rgba(0,78,162,.22);
     }
     .toast {
       position: fixed;
@@ -806,7 +813,7 @@
     });
 
     const params = new URLSearchParams(location.search);
-    const room = normalizeRoom(params.get("room")) || "404";
+    const room = normalizeRoom(params.get("room")) || "202";
     const date = isValidDate(params.get("date")) ? params.get("date") : todayLocal();
     const seat = seats.includes(params.get("seat")) ? params.get("seat") : "1-1";
     const excludeSeats = parseList(params.get("excludeSeats")).filter((value) => seats.includes(value));
