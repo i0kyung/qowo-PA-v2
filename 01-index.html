@@ -481,6 +481,7 @@
       place-items: center;
       animation: pop .5s cubic-bezier(.2,1.3,.4,1) both;
     }
+    .complete-pop[hidden] { display: none; }
     .complete-pop img {
       width: 112px;
       height: 112px;
@@ -1061,9 +1062,8 @@
       if (event.target.id === "detailModal") closeDetailModal();
     });
     document.getElementById("signOk").addEventListener("click", () => {
-      const isComplete = document.getElementById("signTitle").textContent === "청소 완료";
       closeSignModal();
-      if (isComplete) celebrate();
+      celebrate();
     });
     document.getElementById("celebrate").addEventListener("click", hideCelebrate);
     document.getElementById("signGuideButton").addEventListener("click", () => openSignGuideModal(activeSignRole));
@@ -1494,6 +1494,7 @@
       document.getElementById("signTitle").textContent = "청소 완료";
       document.getElementById("signMessage").innerHTML = completionMessageHtml(activeSignRole, completeMessages[rand]);
       document.getElementById("signImage").innerHTML = imageHtml(imageAssets.signGuide, "청소 확인표 싸인 안내 이미지");
+      document.querySelector("#signModal .complete-pop").hidden = false;
       document.getElementById("signOk").textContent = "완료했어요";
       document.getElementById("signModal").classList.add("open");
     }
@@ -1504,7 +1505,8 @@
       document.getElementById("signTitle").textContent = "PA 확인표 보기";
       document.getElementById("signMessage").innerHTML = message;
       document.getElementById("signImage").innerHTML = imageHtml(imageAssets.signGuide, "PA 청소확인표 싸인 위치 안내 이미지");
-      document.getElementById("signOk").textContent = "확인했어요";
+      document.querySelector("#signModal .complete-pop").hidden = true;
+      document.getElementById("signOk").textContent = "완료";
       document.getElementById("signModal").classList.add("open");
     }
     function completionMessageHtml(role, leadText) {
