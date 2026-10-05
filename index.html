@@ -1291,12 +1291,10 @@
       document.getElementById("startLabel").textContent = "내 청소분담 확인하기";
       document.getElementById("splashFoot").textContent = "방장이 뽑은 결과와 똑같이 배정돼요";
     }
+    // 방장 첫 화면·공유 링크 모두 열 때마다 로딩 인트로 재생 (동작 줄이기 설정만 즉시 표시)
     showApp(false);
-    let seen = false;
-    const seenKey = hasSharedRoomDate ? `splashSeen_${normalizeRoom(params.get("room"))}_${selectedDate}` : "splashSeen";
-    try { seen = sessionStorage.getItem(seenKey) === "1"; sessionStorage.setItem(seenKey, "1"); } catch (error) {}
     const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    playSplash(seen || reduceMotion);
+    playSplash(reduceMotion);
   </script>
 </body>
 </html>
