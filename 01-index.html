@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>청소분담 결과 · 청소분담실</title>
   <meta name="description" content="호실과 날짜만 입력하면 16개 청소 역할을 공정하게 랜덤 배정해요.">
-  <meta name="theme-color" content="#f7f8fa">
+  <meta name="theme-color" content="#FFF7F3">
   <link rel="icon" type="image/png" sizes="32x32" href="./images/app-icon-32.png">
   <link rel="icon" type="image/png" sizes="96x96" href="./images/app-icon-96.png">
   <link rel="apple-touch-icon" href="./images/apple-touch-icon.png">
@@ -26,23 +26,31 @@
   <meta name="twitter:card" content="summary_large_image">
   <style>
     :root {
-      --blue: #004EA2;
-      --blue-soft: #eaf1fa;
-      --pink: #F331A5;
-      --pink-soft: #fdeaf6;
-      --yellow: #FDBE25;
-      --yellow-soft: #fff6de;
-      --ink: #191f28;
-      --muted: #8b95a1;
-      --sub: #4e5968;
-      --line: #f0f1f4;
-      --shadow: 0 12px 32px rgba(17, 31, 60, .08);
+      --primary: #EF6A5D;
+      --primary-2: #F8907A;
+      --primary-dark: #D9544A;
+      --primary-soft: #FFEDE8;
+      --primary-line: #FBD5CC;
+      --accent: #24305E;
+      --accent-soft: #EEF0F8;
+      --accent-line: #DCE0F0;
+      --yellow: #FFC83D;
+      --yellow-soft: #FFF6DC;
+      --ink: #1F2A52;
+      --muted: #8E93A8;
+      --sub: #545C78;
+      --line: #F5E6E1;
+      --shadow: 0 14px 34px rgba(214, 98, 80, .10);
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
-      background: #f7f8fa;
+      background:
+        radial-gradient(620px 420px at -10% -8%, rgba(248, 144, 122, .26), transparent 70%),
+        radial-gradient(520px 420px at 110% 30%, rgba(255, 200, 61, .16), transparent 70%),
+        #FFF7F3;
+      background-attachment: fixed;
       color: var(--ink);
       font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
       letter-spacing: -0.2px;
@@ -103,16 +111,37 @@
       box-shadow: 0 8px 18px rgba(56,72,92,.06);
     }
     .btn.primary {
-      background: var(--blue);
+      background: linear-gradient(135deg, var(--primary-2), var(--primary) 60%, var(--primary-dark));
       color: #fff;
       border-color: transparent;
-      box-shadow: 0 8px 18px rgba(0,78,162,.22);
+      box-shadow: 0 8px 18px rgba(239,106,93,.22);
     }
     .section-title {
-      margin: 26px 2px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 28px 2px 14px;
       font-size: 19px;
       font-weight: 950;
     }
+    .section-title .dot { width: 8px; height: 20px; border-radius: 999px; background: linear-gradient(var(--primary-2), var(--primary)); }
+    .section-title small { color: var(--muted); font-size: 13px; font-weight: 800; }
+    .sum-head { display: flex; align-items: center; gap: 10px; }
+    .sum-head img { width: 44px; height: 44px; object-fit: contain; }
+    .personal-card { position: relative; overflow: hidden; }
+    .personal-sticker {
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      width: 92px;
+      height: 92px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 12px rgba(214, 98, 80, .2));
+    }
+    .personal-card .personal-lead { padding-right: 96px; min-height: 72px; }
+    .mine.empty { display: grid; justify-items: center; gap: 6px; padding: 26px 22px; }
+    .mine.empty small { color: var(--muted); font-weight: 700; }
+    .empty-sticker { width: 130px; height: 130px; object-fit: contain; }
     .mine {
       display: grid;
       grid-template-columns: 140px 1fr;
@@ -151,17 +180,17 @@
       padding: 18px 20px;
       border-radius: 20px;
       background: var(--yellow-soft);
-      border: 1px solid #fcecc0;
+      border: 1px solid #FBE7AE;
       color: var(--sub);
     }
     .personal-lead { margin: 0 0 12px; font-size: 15px; font-weight: 700; line-height: 1.5; }
-    .personal-lead strong { color: #97730a; }
+    .personal-lead strong { color: #8a6400; }
     .personal-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
     .personal-list li {
       padding: 12px 14px;
       border-radius: 12px;
       background: #fff;
-      border: 1px solid #fcecc0;
+      border: 1px solid #FBE7AE;
       font-size: 15px;
       font-weight: 700;
       color: var(--sub);
@@ -180,12 +209,12 @@
       color: var(--sub);
       font-weight: 700;
     }
-    .check input { width: 18px; height: 18px; accent-color: var(--blue); }
+    .check input { width: 18px; height: 18px; accent-color: var(--primary); }
     .detail-link {
       margin-top: 15px;
       padding: 0;
       background: transparent;
-      color: var(--blue);
+      color: var(--primary);
       font-weight: 800;
       text-decoration: underline;
       text-underline-offset: 4px;
@@ -194,8 +223,8 @@
       margin: 14px 0 4px;
       padding: 16px;
       border-radius: 16px;
-      background: var(--blue-soft);
-      border: 1px solid #dbe7f5;
+      background: var(--primary-soft);
+      border: 1px solid var(--primary-line);
       color: var(--sub);
       font-size: 14px;
       line-height: 1.55;
@@ -204,7 +233,7 @@
     .notice-card strong {
       display: block;
       margin-bottom: 5px;
-      color: var(--blue);
+      color: var(--primary);
       font-size: 15px;
       font-weight: 800;
     }
@@ -215,7 +244,7 @@
       padding: 0 12px;
       border-radius: 999px;
       background: #fff;
-      border: 1px solid #dfe7ef;
+      border: 1px solid #F0E2DD;
       color: #52616d;
       font-size: 12px;
       font-weight: 950;
@@ -240,14 +269,14 @@
       padding: 0 11px;
       border-radius: 999px;
       background: #fff;
-      border: 1px solid #dfe7ef;
+      border: 1px solid #F0E2DD;
       color: #66727e;
       font-size: 12px;
       font-weight: 950;
     }
     .filter-btn.active {
-      background: var(--blue);
-      border-color: var(--blue);
+      background: var(--primary);
+      border-color: var(--primary);
       color: #fff;
     }
     .grid {
@@ -266,8 +295,22 @@
       gap: 10px;
       align-content: start;
     }
-    .role-card.mine-card { border-color: var(--pink); box-shadow: 0 14px 30px rgba(243,49,165,.18); }
-    .role-card.sign-done { border-color: #cfe0f2; background: #fbfdff; }
+    .role-card.mine-card { position: relative; border: 2px solid var(--primary); box-shadow: 0 14px 30px rgba(239,106,93,.22); }
+    .role-card.mine-card::before {
+      content: "내 담당";
+      position: absolute;
+      top: -11px;
+      left: 14px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .mine-list .role-card.mine-card::before { display: none; }
+    .role-card.sign-done { border-color: #CDE9D5; background: #F7FCF8; }
+    .role-card.sign-done .status-badge.done { background: #E3F4E8; color: #2F8A4E; }
     .mini-top { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
     .seat-badge {
       min-width: 46px;
@@ -277,7 +320,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 999px;
-      background: #f4f7fb;
+      background: #FFF1EC;
       color: #52616d;
       font-weight: 950;
     }
@@ -309,7 +352,7 @@
     .role-stack li {
       padding: 7px 8px;
       border-radius: 12px;
-      background: #f8fafc;
+      background: #FFF8F5;
       color: #56616d;
       font-size: 12px;
       font-weight: 850;
@@ -324,7 +367,7 @@
       gap: 7px;
       margin-top: 4px;
       padding-top: 8px;
-      border-top: 1px solid #edf1f5;
+      border-top: 1px solid #F5E6E1;
     }
     .sign-check {
       display: inline-flex;
@@ -334,7 +377,7 @@
       font-size: 13px;
       font-weight: 950;
     }
-    .sign-check input { width: 17px; height: 17px; accent-color: var(--blue); }
+    .sign-check input { width: 17px; height: 17px; accent-color: var(--primary); }
     .status-badge {
       width: max-content;
       min-height: 26px;
@@ -342,14 +385,14 @@
       border-radius: 999px;
       display: inline-flex;
       align-items: center;
-      background: #f1f4f7;
+      background: #F6F0EE;
       color: #7a8792;
       font-size: 12px;
       font-weight: 950;
     }
     .status-badge.done {
-      background: var(--blue-soft);
-      color: var(--blue);
+      background: var(--primary-soft);
+      color: var(--primary);
     }
     .role-card .detail-link { margin-top: 2px; justify-self: start; font-size: 13px; }
     .modal {
@@ -385,7 +428,7 @@
       width: 42px;
       height: 42px;
       border-radius: 15px;
-      background: #f5f7fa;
+      background: #FFF1EC;
       color: #5e6974;
       font-weight: 950;
       font-size: 22px;
@@ -394,7 +437,7 @@
       min-height: 210px;
       border-radius: 24px;
       overflow: hidden;
-      background: #f6f7fb;
+      background: #FFF8F5;
       border: 1px solid var(--line);
       display: grid;
       place-items: center;
@@ -414,7 +457,7 @@
       width: 100%;
       display: grid;
       place-items: center;
-      background: var(--blue-soft);
+      background: var(--primary-soft);
       color: var(--muted);
       font-weight: 800;
     }
@@ -422,25 +465,25 @@
       margin-top: 14px;
       padding: 15px;
       border-radius: 20px;
-      background: #f9fbfd;
+      background: #FFF8F5;
     }
     .detail-block.sign-focus {
-      background: var(--pink-soft);
-      border: 1px solid #f9d4ea;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-line);
     }
     .finish-block {
       margin-top: 16px;
       padding: 16px;
       border-radius: 22px;
       background: #fff;
-      border: 2px solid var(--blue-soft);
-      box-shadow: 0 10px 24px rgba(0,78,162,.08);
+      border: 2px solid var(--primary-soft);
+      box-shadow: 0 10px 24px rgba(239,106,93,.08);
     }
     .finish-title {
       margin: 0 0 12px;
       font-size: 15px;
       font-weight: 800;
-      color: var(--blue);
+      color: var(--primary);
     }
     .finish-step {
       padding: 14px;
@@ -449,8 +492,8 @@
     }
     .finish-step + .finish-step { margin-top: 10px; }
     .finish-step.sign-focus {
-      background: var(--pink-soft);
-      border: 1px solid #f9d4ea;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-line);
     }
     .finish-step strong {
       display: flex;
@@ -467,13 +510,13 @@
       width: 22px;
       height: 22px;
       border-radius: 50%;
-      background: var(--blue);
+      background: var(--primary);
       color: #fff;
       font-size: 13px;
       font-weight: 800;
       flex: 0 0 auto;
     }
-    .finish-step.sign-focus .step-num { background: var(--pink); }
+    .finish-step.sign-focus .step-num { background: var(--accent); }
     .finish-step p { margin: 0; color: #394852; line-height: 1.48; font-weight: 800; }
     .finish-step small {
       display: block;
@@ -482,7 +525,7 @@
       font-weight: 800;
       line-height: 1.45;
     }
-    .finish-step .quote { color: var(--pink); font-weight: 800; }
+    .finish-step .quote { color: var(--accent); font-weight: 800; }
     .finish-step .checks { margin: 0; }
     .detail-block strong { display: block; margin-bottom: 6px; font-size: 13px; color: #66727f; }
     .detail-block p { margin: 0; color: #394852; line-height: 1.48; font-weight: 800; }
@@ -500,7 +543,7 @@
       border-radius: 24px;
       overflow: hidden;
       border: 1px solid var(--line);
-      background: #f8fafc;
+      background: #FFF8F5;
       display: grid;
       place-items: center;
     }
@@ -540,8 +583,8 @@
       margin: 12px 0 0;
       padding: 14px;
       border-radius: 14px;
-      background: var(--pink-soft);
-      border: 1px solid #f9d4ea;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-line);
       text-align: left;
       color: var(--sub);
       font-size: 14px;
@@ -558,11 +601,11 @@
     .sign-role-info .quote {
       display: block;
       margin: 2px 0;
-      color: var(--pink);
+      color: var(--accent);
       font-weight: 800;
     }
     .detail-block .quote {
-      color: var(--pink);
+      color: var(--accent);
       font-weight: 800;
     }
     .sign-ok {
@@ -570,10 +613,10 @@
       min-height: 52px;
       margin-top: 14px;
       border-radius: 16px;
-      background: var(--blue);
+      background: linear-gradient(135deg, var(--primary-2), var(--primary) 60%, var(--primary-dark));
       color: #fff;
       font-weight: 800;
-      box-shadow: 0 10px 20px rgba(0,78,162,.22);
+      box-shadow: 0 10px 20px rgba(239,106,93,.22);
     }
     .toast {
       position: fixed;
@@ -589,7 +632,7 @@
       border-radius: 999px;
       display: inline-flex;
       align-items: center;
-      background: #263238;
+      background: #1F2A52;
       color: #fff;
       font-weight: 900;
       white-space: nowrap;
@@ -641,7 +684,7 @@
       height: 300px;
       margin: -150px 0 0 -150px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(253,190,37,.55), rgba(243,49,165,.22) 45%, transparent 68%);
+      background: radial-gradient(circle, rgba(255,200,61,.55), rgba(239,106,93,.26) 45%, transparent 68%);
       z-index: 1;
       opacity: 0;
       animation: celGlow 1.6s ease-out both;
@@ -659,14 +702,14 @@
       height: 120px;
       margin: -60px 0 0 -60px;
       border-radius: 50%;
-      border: 6px solid rgba(253,190,37,.85);
+      border: 6px solid rgba(255,200,61,.85);
       z-index: 1;
       transform: scale(.2);
       opacity: 0;
       animation: celRing .8s ease-out .05s forwards;
     }
     .cel-ring2 {
-      border-color: rgba(243,49,165,.8);
+      border-color: rgba(239,106,93,.8);
       border-width: 4px;
       animation-delay: .18s;
     }
@@ -771,6 +814,9 @@
       .mine { padding: 18px; border-radius: 26px; }
       .grid { grid-template-columns: 1fr; }
       .top-actions .btn { flex: 1; }
+      .sign-summary { flex-wrap: wrap; }
+      .filter-actions { width: 100%; justify-content: stretch; }
+      .filter-btn { flex: 1; min-height: 38px; }
     }
     @media print {
       @page {
@@ -894,16 +940,19 @@
     </header>
 
     <section>
-      <h2 class="section-title">내 청소분담</h2>
+      <h2 class="section-title"><span class="dot"></span>내 청소분담</h2>
       <article class="mine" id="mineCard"></article>
     </section>
 
     <section>
-      <h2 class="section-title">전체 청소분담표</h2>
+      <h2 class="section-title"><span class="dot"></span>전체 청소분담표</h2>
       <div class="sign-summary">
-        <div>
+        <div class="sum-head">
+          <img src="./images/sticker-clipboard.png" alt="" aria-hidden="true">
+          <div>
           <h3>PA 확인표 싸인 현황</h3>
           <p id="signSummaryText">완료 0 / 16</p>
+          </div>
         </div>
         <div class="filter-actions">
           <button class="filter-btn active" id="showAllSigns" type="button">전체 보기</button>
@@ -914,8 +963,9 @@
     </section>
 
     <section>
-      <h2 class="section-title">개인구역 (전원 공통)</h2>
+      <h2 class="section-title"><span class="dot"></span>개인구역 <small>전원 공통</small></h2>
       <div class="personal-card">
+        <img class="personal-sticker" src="./images/sticker-bag-tiger.png" alt="" aria-hidden="true">
         <p class="personal-lead">개인구역은 랜덤 배정이 아니라 <strong>각자 자기 자리(방)를 직접</strong> 청소합니다.</p>
         <ul class="personal-list">
           <li>🧹 바닥 쓸고 닦기</li>
@@ -976,7 +1026,7 @@
 
   <div class="modal" id="signModal" role="dialog" aria-modal="true" aria-labelledby="signTitle">
     <div class="sheet sign-sheet">
-      <div class="complete-pop" aria-hidden="true"><img src="./images/mascot-cheer.png" alt=""></div>
+      <div class="complete-pop" aria-hidden="true"><img src="./images/sticker-heart-tiger.png" alt=""></div>
       <h2 id="signTitle">청소 완료</h2>
       <div class="sign-image" id="signImage"></div>
       <div class="sign-message" id="signMessage"></div>
@@ -992,7 +1042,7 @@
       <div class="cel-ring"></div>
       <div class="cel-ring cel-ring2"></div>
       <div class="spark-field" id="sparkField"></div>
-      <img class="celebrate-mascot" src="./images/mascot-cheer.png" alt="">
+      <img class="celebrate-mascot" src="./images/sticker-jump-tiger.png" alt="">
       <div class="celebrate-text">청소 완료! 수고했어요 🎉</div>
     </div>
   </div>
@@ -1337,7 +1387,7 @@
       const mineCard = document.getElementById("mineCard");
       if (!mine.roles.length) {
         mineCard.className = "mine empty";
-        mineCard.innerHTML = "오늘 배정된 청소 역할이 없습니다.";
+        mineCard.innerHTML = `<img class="empty-sticker" src="./images/sticker-sleep-tiger.png" alt="" aria-hidden="true"><div>오늘 배정된 청소 역할이 없어요.<br><small>개인구역만 깨끗하게 정리해주세요.</small></div>`;
         return;
       }
       mineCard.className = "mine";
@@ -1597,8 +1647,8 @@
       const el = document.getElementById("celebrate");
       const field = document.getElementById("sparkField");
       field.innerHTML = "";
-      const sparkColors = ["#FDBE25", "#F331A5", "#004EA2"];
-      const confColors = ["#FDBE25", "#F331A5", "#004EA2", "#ff6dbd", "#2f74c9", "#7fd98a"];
+      const sparkColors = ["#FFC83D", "#EF6A5D", "#24305E"];
+      const confColors = ["#FFC83D", "#EF6A5D", "#F8907A", "#24305E", "#6E8CF5", "#7fd98a"];
       const hearts = ["💛", "💗", "🧡"];
       // 반짝이 별
       const sparkN = 18;

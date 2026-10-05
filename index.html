@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>청소분담실</title>
   <meta name="description" content="호실과 날짜만 입력하면 16개 청소 역할을 공정하게 랜덤 배정해요.">
-  <meta name="theme-color" content="#f7f8fa">
+  <meta name="theme-color" content="#FFF7F3">
   <link rel="icon" type="image/png" sizes="32x32" href="./images/app-icon-32.png">
   <link rel="icon" type="image/png" sizes="96x96" href="./images/app-icon-96.png">
   <link rel="apple-touch-icon" href="./images/apple-touch-icon.png">
@@ -24,110 +24,311 @@
   <meta property="og:image:height" content="1000">
   <meta property="og:image:alt" content="청소분담실 앱 아이콘과 기숙사 알림장 소개 이미지">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="preload" as="image" href="./images/app-icon-192.png">
+  <link rel="preload" as="image" href="./images/sticker-note-tiger.png">
   <style>
     :root {
-      --blue: #004EA2;
-      --blue-dark: #003d82;
-      --blue-soft: #eaf1fa;
-      --pink: #F331A5;
-      --pink-soft: #fdeaf6;
-      --yellow: #FDBE25;
-      --yellow-soft: #fff6de;
-      --coral-soft: #fdecea;
-      --coral-ink: #c9463b;
-      --bg: #f7f8fa;
+      --primary: #EF6A5D;
+      --primary-2: #F8907A;
+      --primary-dark: #D9544A;
+      --primary-soft: #FFEDE8;
+      --primary-line: #FBD5CC;
+      --accent: #24305E;
+      --accent-soft: #EEF0F8;
+      --yellow: #FFC83D;
+      --yellow-soft: #FFF6DC;
+      --yellow-line: #FBE7AE;
+      --bg: #FFF7F3;
       --card: #ffffff;
-      --ink: #191f28;
-      --sub: #4e5968;
-      --muted: #8b95a1;
-      --line: #f2f4f6;
-      --field: #e5e8eb;
-      --shadow: 0 12px 32px rgba(17, 31, 60, .08);
+      --ink: #1F2A52;
+      --sub: #545C78;
+      --muted: #8E93A8;
+      --line: #F5E6E1;
+      --field: #EDE0DB;
+      --shadow: 0 14px 34px rgba(214, 98, 80, .10);
     }
     * { box-sizing: border-box; }
+    html { background: var(--bg); }
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--bg);
+      background:
+        radial-gradient(520px 380px at -8% -6%, rgba(248, 144, 122, .30), transparent 70%),
+        radial-gradient(420px 360px at 108% 34%, rgba(255, 200, 61, .20), transparent 70%),
+        radial-gradient(560px 420px at 50% 112%, rgba(239, 106, 93, .22), transparent 70%),
+        var(--bg);
+      background-attachment: fixed;
       color: var(--ink);
       font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
       letter-spacing: -0.2px;
+      overflow-x: hidden;
     }
     button, input { font: inherit; }
     button { border: 0; cursor: pointer; }
+    [hidden] { display: none !important; }
+
+    /* ---------- 시작 화면 ---------- */
+    .splash {
+      position: relative;
+      width: min(460px, 100%);
+      min-height: 100vh;
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: 36px 24px 40px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+    }
+    .splash-art {
+      position: relative;
+      width: min(78vw, 320px);
+      aspect-ratio: 1;
+      margin-bottom: 18px;
+    }
+    .splash-art .main {
+      position: absolute;
+      inset: 4% 2% 0 6%;
+      width: 92%;
+      height: 96%;
+      object-fit: contain;
+      filter: drop-shadow(0 22px 30px rgba(214, 98, 80, .28));
+      animation: float 3s ease-in-out infinite;
+    }
+    .deco {
+      position: absolute;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 14px rgba(214, 98, 80, .18));
+      animation: float 3.6s ease-in-out infinite;
+    }
+    .deco.calendar { width: 26%; left: -10%; top: -2%; transform: rotate(-10deg); animation-delay: -.8s; }
+    .deco.star { width: 15%; right: -6%; top: 58%; animation-delay: -1.6s; }
+    .deco.bell { width: 17%; right: -4%; top: 4%; transform: rotate(12deg); animation-delay: -2.2s; }
+    .dash-ring {
+      position: absolute;
+      inset: -6%;
+      border: 2px dashed rgba(239, 106, 93, .22);
+      border-radius: 50%;
+      animation: spin 40s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .splash h1 {
+      margin: 0;
+      font-size: 44px;
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: -1.4px;
+      color: var(--ink);
+    }
+    .splash h1 .spark { color: var(--primary); }
+    .splash-lead {
+      margin: 12px 0 0;
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 700;
+      opacity: .86;
+    }
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin: 18px 0 30px;
+      padding: 0;
+      list-style: none;
+    }
+    .flow li {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px 7px 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .78);
+      border: 1px solid var(--line);
+      color: var(--sub);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .flow b {
+      display: inline-grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      font-size: 11px;
+    }
+    .cta {
+      width: min(100%, 340px);
+      min-height: 60px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary-2), var(--primary) 55%, var(--primary-dark));
+      color: #fff;
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      box-shadow: 0 16px 30px rgba(239, 106, 93, .36), inset 0 1px 0 rgba(255, 255, 255, .35);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: transform .08s ease, box-shadow .2s ease;
+    }
+    .cta:hover { box-shadow: 0 18px 34px rgba(239, 106, 93, .44), inset 0 1px 0 rgba(255, 255, 255, .35); }
+    .cta:active { transform: scale(.98); }
+    .cta .arrow { font-size: 22px; line-height: 1; transform: translateY(-1px); }
+    @media (max-width: 330px) {
+      .seat-grid, .chip-panel { grid-template-columns: repeat(3, 1fr); }
+    }
+    .splash-foot {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    /* ---------- 입력 화면 ---------- */
     .app {
       width: min(460px, 100%);
       min-height: 100vh;
       margin: 0 auto;
-      padding: 32px 20px;
+      padding: 18px 18px 36px;
       display: grid;
-      align-content: center;
-      gap: 20px;
+      align-content: start;
+      gap: 16px;
+      animation: rise .35s ease-out both;
     }
-    .hero { text-align: center; padding: 6px 6px 0; }
-    .badge {
-      display: inline-block;
-      width: 96px;
-      height: 96px;
-      margin-bottom: 12px;
-      animation: float 2.6s ease-in-out infinite;
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .badge img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      filter: drop-shadow(0 12px 18px rgba(225, 98, 86, .28));
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 4px 2px;
     }
-    .brand-name {
-      display: inline-block;
-      margin: 0 0 8px;
-      padding: 5px 12px;
-      border-radius: 999px;
-      background: var(--coral-soft);
-      color: var(--coral-ink);
-      font-size: 13px;
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0;
+      background: none;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: -0.4px;
+    }
+    .brand img { width: 34px; height: 34px; filter: drop-shadow(0 4px 8px rgba(214, 98, 80, .25)); }
+    .stepper {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
       font-weight: 800;
-      letter-spacing: -0.1px;
+    }
+    .stepper i {
+      width: 22px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--field);
+      transition: background .2s ease, width .2s ease;
+    }
+    .stepper i.on { width: 30px; background: var(--primary); }
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 6px;
+      min-height: 150px;
+      padding: 20px 8px 20px 22px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #FFE3DA, #FFF1E6 60%, #FFF7EC);
+      border: 1px solid var(--primary-line);
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      bottom: -60px;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .55);
+    }
+    .hero-text { position: relative; z-index: 1; }
+    .hero h1 { margin: 0; font-size: 25px; line-height: 1.25; font-weight: 900; letter-spacing: -0.7px; }
+    .intro {
+      margin: 8px 0 0;
+      color: var(--sub);
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+    .hero-sticker {
+      position: relative;
+      z-index: 1;
+      width: 124px;
+      height: 124px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 16px rgba(214, 98, 80, .25));
+      animation: float 2.8s ease-in-out infinite;
     }
     @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    h1 { margin: 0; font-size: 30px; line-height: 1.25; font-weight: 800; letter-spacing: -0.6px; }
-    .intro {
-      margin: 12px auto 0;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.55;
-      font-weight: 600;
+      0%, 100% { translate: 0 0; }
+      50% { translate: 0 -7px; }
     }
     .card {
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 24px;
+      border-radius: 26px;
       box-shadow: var(--shadow);
-      padding: 24px 20px;
+      padding: 22px 20px;
     }
     .step { display: none; }
-    .step.active { display: block; }
+    .step.active { display: block; animation: rise .3s ease-out both; }
     .field { display: grid; gap: 8px; margin-bottom: 18px; }
-    .field span { font-size: 14px; font-weight: 700; color: var(--sub); }
+    .field > span, .field-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--sub);
+    }
+    .field-label img { width: 24px; height: 24px; object-fit: contain; }
     input, .date-button {
       width: 100%;
-      min-height: 54px;
+      min-height: 56px;
       border: 1.5px solid var(--field);
-      border-radius: 14px;
+      border-radius: 16px;
       background: #fff;
       padding: 15px 16px;
       color: var(--ink);
       outline: 0;
-      font-weight: 700;
+      font-weight: 800;
+      font-size: 17px;
+      transition: border-color .15s ease, box-shadow .15s ease;
     }
-    input::placeholder { color: #b0b8c1; font-weight: 600; }
+    input::placeholder { color: #c3bab7; font-weight: 600; }
     input:focus, .date-button:focus-visible {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 4px rgba(0, 78, 162, .12);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(239, 106, 93, .14);
+    }
+    .room-wrap { position: relative; }
+    .room-wrap input { padding-right: 48px; }
+    .room-wrap .unit {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-weight: 800;
+      pointer-events: none;
     }
     .date-button {
       display: flex;
@@ -135,42 +336,61 @@
       justify-content: space-between;
       gap: 12px;
       text-align: left;
+      padding-block: 8px;
     }
-    .date-value { font-size: 16px; }
+    .date-value { font-size: 17px; }
     .date-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
       display: grid;
       place-items: center;
-      background: var(--blue-soft);
-      color: var(--blue);
-      font-size: 20px;
+      background: var(--primary-soft);
       flex: 0 0 auto;
     }
-    .chip {
-      min-height: 42px;
-      border-radius: 999px;
-      background: #f2f4f6;
-      color: var(--sub);
-      font-weight: 700;
-    }
-    .chip.active { background: var(--blue-soft); color: var(--blue); }
+    .date-icon img { width: 32px; height: 32px; object-fit: contain; }
     .section-label {
-      margin: 4px 0 12px;
-      color: var(--sub);
-      font-size: 13px;
-      font-weight: 800;
+      margin: 0 0 14px;
+      color: var(--primary-dark);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .4px;
     }
     .settings-card {
-      display: grid;
-      gap: 12px;
-      margin: 18px 0;
-      padding: 16px;
+      margin: 4px 0 18px;
       border-radius: 18px;
-      background: #f7f8fa;
+      background: #FFFAF8;
       border: 1px solid var(--line);
+      overflow: hidden;
     }
+    .settings-card summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 15px 16px;
+      cursor: pointer;
+      list-style: none;
+      color: var(--sub);
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .settings-card summary::-webkit-details-marker { display: none; }
+    .settings-card summary .sum-note { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .settings-card summary .chev {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      transition: transform .2s ease;
+    }
+    .settings-card[open] summary .chev { transform: rotate(180deg); }
+    .settings-body { display: grid; gap: 14px; padding: 2px 16px 16px; }
     .setting-row { display: grid; gap: 8px; }
     .setting-head {
       display: flex;
@@ -187,6 +407,8 @@
       font-weight: 700;
       white-space: nowrap;
     }
+    .setting-count.has { color: var(--primary-dark); }
+    .settings-body input { min-height: 48px; font-size: 16px; }
     .toggle-select {
       min-height: 44px;
       border-radius: 12px;
@@ -201,6 +423,7 @@
       gap: 7px;
     }
     .chip-panel.open { display: grid; }
+    #excludeRolePanel.open { grid-template-columns: repeat(2, 1fr); }
     .select-chip {
       min-height: 38px;
       padding: 0 8px;
@@ -212,10 +435,10 @@
       font-weight: 700;
     }
     .select-chip.active {
-      background: var(--blue);
-      border-color: var(--blue);
+      background: var(--accent);
+      border-color: var(--accent);
       color: #fff;
-      box-shadow: 0 6px 12px rgba(0, 78, 162, .2);
+      box-shadow: 0 6px 12px rgba(36, 48, 94, .2);
     }
     .warn-note {
       display: none;
@@ -223,7 +446,7 @@
       padding: 11px 13px;
       border-radius: 12px;
       background: var(--yellow-soft);
-      color: #8a6d00;
+      color: #8a6400;
       font-size: 12px;
       line-height: 1.45;
       font-weight: 700;
@@ -235,109 +458,96 @@
       gap: 8px;
     }
     .seat {
-      min-height: 48px;
-      border-radius: 14px;
-      background: #f2f4f6;
+      min-height: 52px;
+      border-radius: 16px;
+      background: #FFF4F0;
       color: var(--sub);
-      font-weight: 700;
+      font-weight: 800;
+      font-size: 16px;
       border: 1.5px solid transparent;
-      transition: transform .05s ease;
+      transition: transform .06s ease, background .15s ease;
     }
-    .seat:active { transform: scale(.96); }
+    .seat:hover { background: var(--primary-soft); }
+    .seat:active { transform: scale(.95); }
     .seat.active {
-      background: var(--blue);
-      border-color: var(--blue);
+      background: var(--primary);
+      border-color: var(--primary);
       color: #fff;
-      box-shadow: 0 8px 16px rgba(0, 78, 162, .24);
+      box-shadow: 0 8px 16px rgba(239, 106, 93, .32);
     }
     .seat.disabled {
       cursor: not-allowed;
-      background: #f7f8fa;
+      background: #faf7f6;
       border-color: var(--line);
-      color: #c4ccd4;
+      color: #cfc6c3;
     }
     .seat .disabled-text {
       display: block;
       margin-top: 2px;
       font-size: 10px;
       font-weight: 800;
-      color: #c4ccd4;
+      color: #cfc6c3;
     }
     .submit, .next {
       width: 100%;
-      min-height: 56px;
+      min-height: 58px;
       margin-top: 6px;
-      border-radius: 16px;
-      background: var(--blue);
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--primary-2), var(--primary) 60%, var(--primary-dark));
       color: #fff;
       font-size: 17px;
-      font-weight: 800;
-      box-shadow: 0 10px 20px rgba(0, 78, 162, .22);
-      transition: transform .05s ease;
+      font-weight: 900;
+      box-shadow: 0 12px 22px rgba(239, 106, 93, .32);
+      transition: transform .06s ease;
     }
-    .submit:active, .next:active { transform: scale(.99); }
+    .submit:active, .next:active { transform: scale(.985); }
+    .submit:disabled { opacity: .45; box-shadow: none; cursor: not-allowed; }
     .back-button {
       width: 100%;
       min-height: 50px;
       margin-top: 10px;
-      border-radius: 14px;
-      background: #f2f4f6;
+      border-radius: 16px;
+      background: #FFF4F0;
       color: var(--sub);
-      font-weight: 700;
-    }
-    .hint {
-      margin: 14px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-      text-align: center;
-      font-weight: 600;
+      font-weight: 800;
     }
     .selected-info {
-      margin: 0 0 16px;
-      padding: 14px 16px;
-      border-radius: 14px;
-      background: var(--blue-soft);
-      border: 1px solid #dbe7f5;
-      color: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 0 0 14px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
       font-size: 14px;
       line-height: 1.45;
       font-weight: 800;
       text-align: center;
     }
-    .guide-card {
+    .info-card {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      align-items: center;
+      gap: 12px;
       margin: 0 0 16px;
-      padding: 16px;
-      border-radius: 16px;
-      background: var(--yellow-soft);
-      border: 1px solid #fcecc0;
-      color: var(--sub);
+      padding: 14px 16px 14px 10px;
+      border-radius: 18px;
       font-size: 13px;
       line-height: 1.5;
       font-weight: 600;
+      color: var(--sub);
     }
-    .guide-card strong {
-      display: block;
-      margin-bottom: 6px;
-      color: #97730a;
-      font-size: 14px;
-      font-weight: 800;
-    }
-    .guide-card ol { margin: 0; padding-left: 19px; }
-    .guide-card li { margin: 3px 0; }
-    .shared-notice {
-      display: none;
-      margin: 0 0 14px;
-      padding: 14px 16px;
-      border-radius: 14px;
-      background: var(--pink-soft);
-      border: 1px solid #f9d4ea;
-      color: #c01e7f;
-      font-size: 13px;
-      line-height: 1.45;
-      font-weight: 700;
-    }
-    .shared-notice.show { display: block; }
+    .info-card img { width: 64px; height: 64px; object-fit: contain; }
+    .info-card strong { display: block; margin-bottom: 4px; font-size: 14px; font-weight: 900; }
+    .guide-card { background: var(--yellow-soft); border: 1px solid var(--yellow-line); }
+    .guide-card strong { color: #8a6400; }
+    .guide-card ol { margin: 0; padding-left: 18px; }
+    .guide-card li { margin: 2px 0; }
+    .shared-notice { display: none; background: var(--primary-soft); border: 1px solid var(--primary-line); }
+    .shared-notice strong { color: var(--primary-dark); }
+    .shared-notice.show { display: grid; }
     .calendar-backdrop {
       position: fixed;
       inset: 0;
@@ -346,14 +556,14 @@
       align-items: end;
       justify-content: center;
       padding: 16px;
-      background: rgba(23, 31, 40, .4);
+      background: rgba(31, 42, 82, .36);
     }
     .calendar-backdrop.open { display: flex; }
     .calendar-sheet {
       width: min(430px, 100%);
-      border-radius: 24px;
+      border-radius: 28px;
       background: #fff;
-      box-shadow: 0 28px 80px rgba(23, 31, 40, .28);
+      box-shadow: 0 28px 80px rgba(31, 42, 82, .28);
       padding: 20px;
       animation: sheetIn .2s ease-out;
     }
@@ -368,12 +578,12 @@
       gap: 12px;
       margin-bottom: 12px;
     }
-    .month-title { font-size: 18px; font-weight: 800; }
+    .month-title { font-size: 18px; font-weight: 900; }
     .month-nav {
       width: 44px;
       height: 44px;
-      border-radius: 12px;
-      background: #f2f4f6;
+      border-radius: 14px;
+      background: #FFF4F0;
       color: var(--sub);
       font-size: 22px;
       font-weight: 800;
@@ -390,19 +600,21 @@
       font-size: 12px;
       font-weight: 700;
     }
+    .week span:first-child { color: var(--primary); }
     .day {
       aspect-ratio: 1;
-      border-radius: 12px;
+      border-radius: 14px;
       background: transparent;
       color: var(--sub);
       font-weight: 700;
     }
+    .day:hover { background: #FFF4F0; }
     .day.blank { pointer-events: none; }
-    .day.today { border: 1.5px solid var(--blue); color: var(--blue); }
+    .day.today { border: 1.5px solid var(--primary); color: var(--primary); }
     .day.selected {
-      background: var(--blue);
+      background: var(--primary);
       color: #fff;
-      box-shadow: 0 8px 16px rgba(0, 78, 162, .24);
+      box-shadow: 0 8px 16px rgba(239, 106, 93, .3);
     }
     .calendar-foot {
       display: flex;
@@ -412,92 +624,135 @@
     .calendar-foot button {
       flex: 1;
       min-height: 46px;
-      border-radius: 12px;
-      background: #f2f4f6;
+      border-radius: 14px;
+      background: #FFF4F0;
       color: var(--sub);
       font-weight: 800;
     }
-    .calendar-foot .today-btn { background: var(--blue-soft); color: var(--blue); }
+    .calendar-foot .today-btn { background: var(--primary-soft); color: var(--primary-dark); }
     @media (max-width: 380px) {
-      .app { padding-inline: 14px; }
-      .card { padding: 20px 16px; border-radius: 20px; }
-      .seat-grid { grid-template-columns: repeat(3, 1fr); }
-      .chip-panel { grid-template-columns: repeat(3, 1fr); }
-      h1 { font-size: 27px; }
-      .calendar-sheet { padding: 16px; border-radius: 20px; }
-      .day { border-radius: 11px; }
+      .app { padding-inline: 12px; }
+      .card { padding: 20px 16px; border-radius: 22px; }
+      .seat-grid { gap: 7px; }
+      .seat { min-height: 48px; font-size: 15px; }
+      .splash h1 { font-size: 38px; }
+      .hero h1 { font-size: 22px; }
+      .hero-sticker { width: 100px; height: 100px; }
+      .calendar-sheet { padding: 16px; border-radius: 22px; }
+      .day { border-radius: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
 <body>
-  <main class="app">
+  <section class="splash" id="splash">
+    <div class="splash-art" aria-hidden="true">
+      <div class="dash-ring"></div>
+      <img class="deco calendar" src="./images/sticker-calendar.png" alt="">
+      <img class="deco bell" src="./images/sticker-bell.png" alt="">
+      <img class="deco star" src="./images/sticker-star.png" alt="">
+      <img class="main" src="./images/sticker-note-tiger.png" alt="">
+    </div>
+    <h1>청소분담실</h1>
+    <p class="splash-lead">기숙사 청소 분담을 더 쉽고 공정하게</p>
+    <ul class="flow" aria-label="사용 순서">
+      <li><b>1</b>호실 입력</li>
+      <li><b>2</b>침대번호 선택</li>
+      <li><b>3</b>랜덤 배정</li>
+    </ul>
+    <button class="cta" id="startButton" type="button">시작하기 <span class="arrow" aria-hidden="true">›</span></button>
+    <p class="splash-foot">같은 호실·날짜면 누가 뽑아도 같은 결과가 나와요</p>
+  </section>
+
+  <main class="app" id="appView" hidden>
+    <div class="topbar">
+      <button class="brand" id="brandHome" type="button" aria-label="시작 화면으로"><img src="./images/app-icon-96.png" alt="" width="34" height="34">청소분담실</button>
+      <span class="stepper" aria-label="진행 단계"><i class="on" id="dot1"></i><i id="dot2"></i></span>
+    </div>
+
     <section class="hero">
-      <div class="badge" aria-hidden="true"><img src="./images/app-icon-192.png" alt="" width="96" height="96"></div>
-      <div><p class="brand-name">청소분담실</p></div>
-      <h1 id="heroTitle">PA 랜덤청소분담</h1>
-      <p class="intro" id="heroIntro">호실과 날짜를 입력하면<br>16개 청소 역할이 자동으로 배정됩니다.</p>
+      <div class="hero-text">
+        <h1 id="heroTitle">호실과 날짜 입력</h1>
+        <p class="intro" id="heroIntro">입력하면 16개 청소 역할이<br>자동으로 배정돼요.</p>
+      </div>
+      <img class="hero-sticker" id="heroSticker" src="./images/sticker-laptop-tiger.png" alt="" aria-hidden="true">
     </section>
 
     <form class="card" id="entryForm">
       <section class="step active" id="stepOne">
-        <p class="section-label">입력</p>
         <label class="field">
-          <span>호실</span>
-          <input id="roomInput" name="room" inputmode="numeric" autocomplete="off" placeholder="예) 202" required>
+          <span class="field-label"><img src="./images/sticker-house.png" alt="">호실</span>
+          <div class="room-wrap">
+            <input id="roomInput" name="room" inputmode="numeric" autocomplete="off" placeholder="예) 202" required>
+            <span class="unit" aria-hidden="true">호</span>
+          </div>
         </label>
 
         <div class="field">
-          <span>청소점검 날짜</span>
+          <span class="field-label"><img src="./images/sticker-clipboard.png" alt="">청소점검 날짜</span>
           <button class="date-button" id="dateButton" type="button" aria-haspopup="dialog">
             <span class="date-value" id="dateDisplay"></span>
-            <span class="date-icon" aria-hidden="true">▦</span>
+            <span class="date-icon" aria-hidden="true"><img src="./images/sticker-calendar.png" alt=""></span>
           </button>
         </div>
 
-        <section class="settings-card" aria-label="선택 설정">
-          <p class="section-label" style="margin:0">선택 설정</p>
-          <label class="field" style="margin-bottom:0">
-            <span>참여 인원</span>
-            <input id="memberCountInput" type="number" min="1" max="16" value="16">
-          </label>
-          <div class="setting-row">
-            <div class="setting-head">
-              <span>제외 인원</span>
-              <span class="setting-count" id="excludeSeatCount">없음</span>
+        <details class="settings-card" id="settingsCard">
+          <summary>
+            <span>선택 설정 <span class="sum-note" id="settingsNote">· 인원·제외 조정</span></span>
+            <span class="chev" aria-hidden="true">▼</span>
+          </summary>
+          <div class="settings-body">
+            <label class="field" style="margin-bottom:0">
+              <span>참여 인원</span>
+              <input id="memberCountInput" type="number" min="1" max="16" value="16">
+            </label>
+            <div class="setting-row">
+              <div class="setting-head">
+                <span>제외 인원</span>
+                <span class="setting-count" id="excludeSeatCount">없음</span>
+              </div>
+              <button class="toggle-select" id="toggleExcludeSeats" type="button">제외 인원 선택</button>
+              <div class="chip-panel" id="excludeSeatPanel"></div>
+              <p class="warn-note" id="excludeSeatNote">제외 인원이 있을 경우, 남은 인원에게 일부 청소 역할이 추가 배정될 수 있습니다.</p>
             </div>
-            <button class="toggle-select" id="toggleExcludeSeats" type="button">제외 인원 선택</button>
-            <div class="chip-panel" id="excludeSeatPanel"></div>
-            <p class="warn-note" id="excludeSeatNote">제외 인원이 있을 경우, 남은 인원에게 일부 청소 역할이 추가 배정될 수 있습니다.</p>
-          </div>
-          <div class="setting-row">
-            <div class="setting-head">
-              <span>제외 역할</span>
-              <span class="setting-count" id="excludeRoleCount">없음</span>
+            <div class="setting-row">
+              <div class="setting-head">
+                <span>제외 역할</span>
+                <span class="setting-count" id="excludeRoleCount">없음</span>
+              </div>
+              <button class="toggle-select" id="toggleExcludeRoles" type="button">제외 역할 선택</button>
+              <div class="chip-panel" id="excludeRolePanel"></div>
             </div>
-            <button class="toggle-select" id="toggleExcludeRoles" type="button">제외 역할 선택</button>
-            <div class="chip-panel" id="excludeRolePanel"></div>
           </div>
-        </section>
+        </details>
 
-        <button class="next" id="nextButton" type="button">랜덤 청소분담 시작</button>
+        <button class="next" id="nextButton" type="button">다음 · 침대번호 선택</button>
       </section>
 
       <section class="step" id="stepTwo">
-        <p class="shared-notice" id="sharedNotice">공유된 청소분담 링크입니다.<br>내 침대번호를 선택하면 내 청소분담을 볼 수 있어요.</p>
+        <div class="info-card shared-notice" id="sharedNotice">
+          <img src="./images/sticker-megaphone-tiger.png" alt="">
+          <div><strong>공유된 청소분담 링크예요</strong>내 침대번호를 선택하면 내 청소분담을 볼 수 있어요.</div>
+        </div>
         <div class="selected-info" id="selectedInfo"></div>
-        <div class="guide-card">
-          <strong>사용방법</strong>
-          <ol>
-            <li>내 침대번호를 선택해주세요.</li>
-            <li>내 청소분담이 맨 위에 표시됩니다.</li>
-            <li>청소 후 PA 확인표에 이름 또는 싸인을 남겨주세요.</li>
-          </ol>
+        <div class="info-card guide-card">
+          <img src="./images/sticker-phone-tiger.png" alt="">
+          <div>
+            <strong>사용방법</strong>
+            <ol>
+              <li>내 침대번호를 선택해주세요.</li>
+              <li>내 청소분담이 맨 위에 표시돼요.</li>
+              <li>청소 후 PA 확인표에 이름 또는 싸인!</li>
+            </ol>
+          </div>
         </div>
         <div class="field">
           <span>내 침대번호</span>
           <div class="seat-grid" id="seatGrid"></div>
         </div>
-        <button class="submit" type="submit">청소분담 뽑기 시작</button>
+        <button class="submit" id="submitButton" type="submit" disabled>침대번호를 선택해주세요</button>
         <button class="back-button" id="backButton" type="button">호실/날짜 다시 선택</button>
       </section>
     </form>
@@ -591,11 +846,25 @@
       const isStepTwo = step === 2;
       document.getElementById("stepOne").classList.toggle("active", !isStepTwo);
       document.getElementById("stepTwo").classList.toggle("active", isStepTwo);
-      document.getElementById("heroTitle").textContent = isStepTwo ? "내 침대번호 선택" : "PA 랜덤청소분담";
+      document.getElementById("dot1").classList.toggle("on", !isStepTwo);
+      document.getElementById("dot2").classList.toggle("on", isStepTwo);
+      document.getElementById("heroTitle").textContent = isStepTwo ? "내 침대번호 선택" : "호실과 날짜 입력";
       document.getElementById("heroIntro").innerHTML = isStepTwo
-        ? "내 침대번호를 선택하면<br>내 청소분담이 맨 위에 표시됩니다."
-        : "호실과 날짜를 입력하면<br>16개 청소 역할이 자동으로 배정됩니다.";
+        ? "선택하면 내 청소분담이<br>맨 위에 표시돼요."
+        : "입력하면 16개 청소 역할이<br>자동으로 배정돼요.";
+      document.getElementById("heroSticker").src = isStepTwo ? "./images/sticker-search-tiger.png" : "./images/sticker-laptop-tiger.png";
       if (isStepTwo) updateSelectedInfo();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    function showApp(show) {
+      document.getElementById("splash").hidden = show;
+      document.getElementById("appView").hidden = !show;
+      window.scrollTo(0, 0);
+    }
+    function updateSubmitState() {
+      const submit = document.getElementById("submitButton");
+      submit.disabled = !selectedSeat;
+      submit.textContent = selectedSeat ? `${selectedSeat} 청소분담 뽑기` : "침대번호를 선택해주세요";
     }
     function openCalendar() {
       calendarCursor = parseDate(selectedDate);
@@ -643,6 +912,14 @@
       const roleCount = excludedRoles.size;
       document.getElementById("excludeSeatCount").textContent = seatCount ? `제외 인원 ${seatCount}명 선택됨` : "없음";
       document.getElementById("excludeRoleCount").textContent = roleCount ? `제외 역할 ${roleCount}개 선택됨` : "없음";
+      document.getElementById("excludeSeatCount").classList.toggle("has", seatCount > 0);
+      document.getElementById("excludeRoleCount").classList.toggle("has", roleCount > 0);
+      const memberValue = Number(document.getElementById("memberCountInput").value || 16);
+      const notes = [];
+      if (memberValue !== 16) notes.push(`${memberValue}명`);
+      if (seatCount) notes.push(`인원 ${seatCount}명 제외`);
+      if (roleCount) notes.push(`역할 ${roleCount}개 제외`);
+      document.getElementById("settingsNote").textContent = notes.length ? `· ${notes.join(" · ")}` : "· 인원·제외 조정";
       document.getElementById("excludeSeatNote").classList.toggle("show", seatCount > 0);
       document.querySelectorAll("#excludeSeatPanel .select-chip").forEach((chip) => {
         chip.classList.toggle("active", excludedSeats.has(chip.dataset.seat));
@@ -658,6 +935,7 @@
         if (isExcluded && selectedSeat === button.dataset.seat) selectedSeat = "";
         button.classList.toggle("active", button.dataset.seat === selectedSeat);
       });
+      if (document.getElementById("submitButton")) updateSubmitState();
     }
 
     function renderExcludePanels() {
@@ -717,6 +995,7 @@
       button.addEventListener("click", () => {
         selectedSeat = seat;
         document.querySelectorAll(".seat").forEach((el) => el.classList.toggle("active", el.dataset.seat === selectedSeat));
+        updateSubmitState();
       });
       seatGrid.appendChild(button);
     });
@@ -769,8 +1048,16 @@
       location.href = `00-index.html?${query.toString()}`;
     });
 
+    document.getElementById("memberCountInput").addEventListener("input", updateExcludeSummary);
+    document.getElementById("startButton").addEventListener("click", () => showApp(true));
+    document.getElementById("brandHome").addEventListener("click", () => { setStep(1); showApp(false); });
+    if (excludedSeats.size || excludedRoles.size || (params.get("memberCount") && params.get("memberCount") !== "16")) {
+      document.getElementById("settingsCard").open = true;
+    }
+    updateExcludeSummary();
     document.getElementById("sharedNotice").classList.toggle("show", hasSharedRoomDate);
     setStep(hasSharedRoomDate ? 2 : 1);
+    showApp(hasSharedRoomDate);
   </script>
 </body>
 </html>
