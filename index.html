@@ -254,6 +254,7 @@
       font-weight: 700;
       opacity: .88;
     }
+    .splash-lead strong { color: var(--primary-dark); }
     .flow-text {
       margin: 12px 0 0;
       color: var(--muted);
@@ -865,17 +866,17 @@
       <span class="ch" style="--i:0" aria-hidden="true">청</span><span class="ch" style="--i:1" aria-hidden="true">소</span><span class="ch" style="--i:2" aria-hidden="true">분</span><span class="ch" style="--i:3" aria-hidden="true">담</span><span class="ch" style="--i:4" aria-hidden="true">실</span>
       <svg class="rays" viewBox="0 0 30 30" aria-hidden="true"><g stroke="#EF6A5D" stroke-width="3.6" stroke-linecap="round"><line x1="6" y1="16" x2="4" y2="4"/><line x1="13" y1="18" x2="22" y2="10"/><line x1="15" y1="25" x2="27" y2="24"/></g></svg>
     </h1>
-    <p class="splash-lead rise" style="--d:1.4s">기숙사 청소 분담을 더 쉽고 공정하게</p>
-    <p class="flow-text rise" style="--d:1.55s">호실 입력 · 침대번호 선택 · 랜덤 배정</p>
+    <p class="splash-lead rise" style="--d:1.4s" id="splashLead">기숙사 청소 분담을 더 쉽고 공정하게</p>
+    <p class="flow-text rise" style="--d:1.55s" id="splashFlow">호실 입력 · 침대번호 선택 · 랜덤 배정</p>
 
     <div class="sp-action">
       <div class="loader rise" style="--d:.8s" id="splashLoader" aria-hidden="true">
         <div class="bar"><i></i></div>
-        <span>청소분담실 준비 중</span>
+        <span id="splashLoaderText">청소분담실 준비 중</span>
       </div>
-      <button class="cta" id="startButton" type="button">시작하기 <span class="arrow" aria-hidden="true">›</span></button>
+      <button class="cta" id="startButton" type="button"><span id="startLabel">시작하기</span> <span class="arrow" aria-hidden="true">›</span></button>
     </div>
-    <p class="splash-foot rise" style="--d:1.7s">같은 호실·날짜면 누가 뽑아도 같은 결과가 나와요</p>
+    <p class="splash-foot rise" style="--d:1.7s" id="splashFoot">같은 호실·날짜면 누가 뽑아도 같은 결과가 나와요</p>
   </section>
 
   <main class="app" id="appView" hidden>
@@ -1076,6 +1077,9 @@
       window.clearTimeout(splashTimer);
       splashTimer = window.setTimeout(() => splash.classList.add("ready"), quick ? 30 : 2400);
     }
+    function escapeText(value) {
+      return String(value).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[ch]));
+    }
     function showApp(show) {
       document.getElementById("splash").hidden = show;
       document.getElementById("appView").hidden = !show;
@@ -1270,20 +1274,29 @@
 
     document.getElementById("memberCountInput").addEventListener("input", updateExcludeSummary);
     document.getElementById("startButton").addEventListener("click", () => showApp(true));
-    document.getElementById("brandHome").addEventListener("click", () => { setStep(1); showApp(false); playSplash(true); });
+    document.getElementById("brandHome").addEventListener("click", () => { if (!hasSharedRoomDate) setStep(1); showApp(false); playSplash(true); });
     if (excludedSeats.size || excludedRoles.size || (params.get("memberCount") && params.get("memberCount") !== "16")) {
       document.getElementById("settingsCard").open = true;
     }
     updateExcludeSummary();
     document.getElementById("sharedNotice").classList.toggle("show", hasSharedRoomDate);
     setStep(hasSharedRoomDate ? 2 : 1);
-    showApp(hasSharedRoomDate);
-    if (!hasSharedRoomDate) {
-      let seen = false;
-      try { seen = sessionStorage.getItem("splashSeen") === "1"; sessionStorage.setItem("splashSeen", "1"); } catch (error) {}
-      const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      playSplash(seen || reduceMotion);
+    if (hasSharedRoomDate) {
+      // 공유 링크로 들어온 사람: 인트로에서 "청소분담 도착"을 보여주고, 버튼을 누르면 바로 침대번호 선택으로
+      const sharedRoom = normalizeRoom(params.get("room"));
+      const [, sharedMonth, sharedDay] = selectedDate.split("-").map(Number);
+      document.getElementById("splashLead").innerHTML = `<strong>${escapeText(sharedRoom)}호</strong> · ${sharedMonth}월 ${sharedDay}일 청소분담이 도착했어요`;
+      document.getElementById("splashFlow").textContent = "침대번호 선택 · 내 청소구역 확인 · 확인표 싸인";
+      document.getElementById("splashLoaderText").textContent = "청소분담 불러오는 중";
+      document.getElementById("startLabel").textContent = "내 청소분담 확인하기";
+      document.getElementById("splashFoot").textContent = "방장이 뽑은 결과와 똑같이 배정돼요";
     }
+    showApp(false);
+    let seen = false;
+    const seenKey = hasSharedRoomDate ? `splashSeen_${normalizeRoom(params.get("room"))}_${selectedDate}` : "splashSeen";
+    try { seen = sessionStorage.getItem(seenKey) === "1"; sessionStorage.setItem(seenKey, "1"); } catch (error) {}
+    const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    playSplash(seen || reduceMotion);
   </script>
 </body>
 </html>
