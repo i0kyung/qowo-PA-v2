@@ -3,7 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>청소 역할 섞는 중</title>
+  <title>청소 역할 섞는 중 · 청소분담실</title>
+  <meta name="description" content="호실과 날짜만 입력하면 16개 청소 역할을 공정하게 랜덤 배정해요.">
+  <meta name="theme-color" content="#f7f8fa">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/app-icon-32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="./images/app-icon-96.png">
+  <link rel="apple-touch-icon" href="./images/apple-touch-icon.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="청소분담실">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="청소분담실">
+  <meta property="og:title" content="청소분담실 · PA 랜덤 청소분담">
+  <meta property="og:description" content="호실과 날짜만 입력하면 16개 청소 역할을 공정하게 랜덤 배정해요. 내 청소구역과 싸인 현황까지 한눈에!">
+  <meta property="og:url" content="https://i0kyung.github.io/qowo-PA-v2/">
+  <meta property="og:image" content="https://i0kyung.github.io/qowo-PA-v2/images/og-poster.jpg">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="1000">
+  <meta property="og:image:alt" content="청소분담실 앱 아이콘과 기숙사 알림장 소개 이미지">
+  <meta name="twitter:card" content="summary_large_image">
   <style>
     :root {
       --blue: #004EA2;
@@ -33,6 +53,17 @@
       align-content: center;
       text-align: center;
     }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin: 0 auto 18px;
+      color: #c9463b;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .brand img { width: 28px; height: 28px; filter: drop-shadow(0 4px 8px rgba(225, 98, 86, .25)); }
     h1 { margin: 0; font-size: 28px; line-height: 1.3; font-weight: 800; letter-spacing: -0.5px; }
     .date { margin: 12px 0 0; color: var(--muted); font-weight: 600; }
     .mascot-wrap {
@@ -101,6 +132,7 @@
 </head>
 <body>
   <main class="stage">
+    <div class="brand"><img src="./images/app-icon-96.png" alt="" width="28" height="28">청소분담실</div>
     <h1 id="title">청소분담 생성 중</h1>
     <p class="date" id="dateText"></p>
     <div class="mascot-wrap" aria-hidden="true">
